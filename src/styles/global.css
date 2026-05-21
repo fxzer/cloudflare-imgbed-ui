@@ -1182,3 +1182,7 @@ html.dark .admin-dashboard-btn {
   font-size:16px;
   font-weight: 600;
 }
+
+.el-segmented__item{
+  background-color: var(--el-segmented-bg-color);
+}

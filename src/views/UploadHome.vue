@@ -722,14 +722,13 @@ export default {
     padding: 4px;
     border-radius: 12px;
     background: rgba(64, 158, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.18);
+    /* border: 1px solid rgba(255, 255, 255, 0.18); */
     box-sizing: border-box;
 }
 
 .upload-method-segmented :deep(.el-segmented__item) {
     min-width: 86px;
     min-height: 30px;
-    border-radius: 8px;
     font-size: 14px;
     font-weight: 600;
 }

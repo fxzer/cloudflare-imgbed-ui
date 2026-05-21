@@ -76,7 +76,7 @@
                                 </el-tooltip>
                                 <el-tooltip :disabled="disableTooltip" :content="$t('upload.retryFailed')" placement="top">
                                     <el-dropdown>
-                                        <button class="modern-action-btn" @click="retryError">
+                                        <button class="modern-action-btn retry-failed-btn" @click="retryError">
                                             <font-awesome-icon icon="redo" />
                                         </button>
                                         <template #dropdown>
@@ -2164,6 +2164,9 @@ beforeDestroy() {
     position: relative;
     overflow: hidden;
     outline: none !important;
+}
+.retry-failed-btn{
+  background: var(--el-color-warning, linear-gradient(135deg, #f56c6c 0%, #f78989 100%));
 }
 
 .modern-action-btn:focus,
