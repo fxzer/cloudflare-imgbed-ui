@@ -1560,10 +1560,10 @@ beforeDestroy() {
 }
 @media (max-width: 768px) {
     .upload-list-card {
-        width: 70vw;
+        width: 80vw;
     }
     .upload-list-container {
-        width: 70vw;
+        width: 80vw;
     }
 }
 .upload-list-card.upload-list-busy {
@@ -1606,7 +1606,7 @@ beforeDestroy() {
 }
 @media (max-width: 768px) {
     .upload-card {
-        width: 70vw;
+        width: 80vw;
     }
 }
 .upload-card-busy :deep(.el-upload-dragger) {

@@ -1,10 +1,9 @@
 <template>
     <div class="upload-list-item">
         <a :href="file.url" target="_blank" class="upload-list-item-preview">
-            <!-- 视频 -->
             <video
                 v-if="isVideo(file.name)"
-                style="width: 10vw; border-radius: 12px;"
+                class="preview-media"
                 autoplay
                 muted
                 playsinline
@@ -13,39 +12,34 @@
                 <source :src="file.url" type="video/mp4" />
                 Your browser does not support the video tag.
             </video>
-            <!-- 图片 -->
             <img
                 v-else-if="isImage(file.name)"
-                style="width: 10vw; border-radius: 12px;"
+                class="preview-media"
                 :src="file.url"
+                :alt="file.name"
                 @error="$emit('preview-error', file)"
             />
-            <!-- 其他文件 -->
-            <div v-else style="width: 10vw; border-radius: 12px;">
+            <div v-else class="preview-file-placeholder">
                 <font-awesome-icon icon="file" class="file-icon"></font-awesome-icon>
             </div>
         </a>
         <div class="upload-list-item-content">
             <div class="upload-list-item-name-wrapper">
-                <el-text class="upload-list-item-name" truncated>{{ truncateFilename(file.name) }}</el-text>
+                <span class="upload-list-item-name">{{ file.name }}</span>
             </div>
             <div class="upload-list-item-url" v-if="file.status==='done'">
-                <div class="upload-list-item-url-row">
-                    <el-input v-model="file.finalURL" readonly @click="selectAllText" :size="urlSize">
-                        <template #prepend>URL</template>
-                    </el-input>
-                    <el-input v-model="file.mdURL" readonly @click="selectAllText" :size="urlSize">
-                        <template #prepend>MarkDown</template>
-                    </el-input>
-                </div>
-                <div class="upload-list-item-url-row">
-                    <el-input v-model="file.htmlURL" readonly @click="selectAllText" :size="urlSize">
-                        <template #prepend>HTML</template>
-                    </el-input>
-                    <el-input v-model="file.ubbURL" readonly @click="selectAllText" :size="urlSize">
-                        <template #prepend>BBCode</template>
-                    </el-input>
-                </div>
+                <el-input v-model="file.finalURL" readonly @click="selectAllText" :size="urlSize">
+                    <template #prepend>URL</template>
+                </el-input>
+                <el-input v-model="file.mdURL" readonly @click="selectAllText" :size="urlSize">
+                    <template #prepend>MarkDown</template>
+                </el-input>
+                <el-input v-model="file.htmlURL" readonly @click="selectAllText" :size="urlSize">
+                    <template #prepend>HTML</template>
+                </el-input>
+                <el-input v-model="file.ubbURL" readonly @click="selectAllText" :size="urlSize">
+                    <template #prepend>BBCode</template>
+                </el-input>
             </div>
             <div class="upload-list-item-progress" v-else>
                 <el-progress :percentage="file.progreess" :status="file.status" :show-text="false"/>
@@ -92,22 +86,6 @@ export default {
             const ext = fileName.split('.').pop().toLowerCase()
             return VIDEO_EXTENSIONS.includes(ext)
         },
-        truncateFilename(filename, maxLength = 20) {
-            if (!filename || filename.length <= maxLength) return filename
-            const lastDotIndex = filename.lastIndexOf('.')
-            let name, ext
-            if (lastDotIndex > 0) {
-                name = filename.substring(0, lastDotIndex)
-                ext = filename.substring(lastDotIndex)
-            } else {
-                name = filename
-                ext = ''
-            }
-            const keepEnd = ext.length + 4
-            const keepStart = maxLength - keepEnd - 3
-            if (keepStart <= 0) return filename.substring(0, maxLength - 3) + '...'
-            return name.substring(0, keepStart) + '...' + name.slice(-4) + ext
-        },
         selectAllText(event) {
             navigator.clipboard.writeText(event.target.value)
                 .then(() => {
@@ -124,8 +102,9 @@ export default {
 <style scoped>
 .upload-list-item {
     display: flex;
-    align-items: center;
+    align-items: stretch;
     justify-content: space-between;
+    gap: 12px;
     margin: 8px 10px;
     border: 1px solid var(--upload-list-item-border-color, rgba(64, 158, 255, 0.1));
     padding: 10px 12px;
@@ -140,42 +119,68 @@ export default {
     box-shadow: 0 4px 16px var(--upload-list-item-hover-shadow, rgba(64, 158, 255, 0.12));
     transform: translateY(-2px);
 }
+.upload-list-item-preview {
+    flex-shrink: 0;
+    width: 88px;
+    min-height: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 10px;
+    background: var(--upload-list-preview-bg, rgba(64, 158, 255, 0.06));
+    border: 1px solid var(--upload-list-item-border-color, rgba(64, 158, 255, 0.1));
+    text-decoration: none;
+    align-self: stretch;
+}
+.preview-media {
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: 8px;
+}
+.preview-file-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    min-height: 48px;
+}
+.file-icon {
+    font-size: 28px;
+    color: var(--upload-list-file-icon-color);
+}
 .upload-list-item-content {
     display: flex;
+    flex: 1;
     flex-direction: column;
-    margin-left: 10px;
+    min-width: 0;
 }
 .upload-list-item-action {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
     gap: 6px;
-}
-.upload-list-item-url-row {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    width: 38vw;
-    gap: 8px;
-    margin-bottom: 6px;
-}
-.upload-list-item-url-row:last-child {
-    margin-bottom: 0;
+    align-self: stretch;
 }
 .upload-list-item-url {
-    display: flex;
-    flex-direction: column;
-}
-.file-icon {
-    font-size: 30px;
-    color: var(--upload-list-file-icon-color);
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    width: 100%;
 }
 
 /* Name Wrapper */
 .upload-list-item-name-wrapper {
     display: flex;
     align-items: center;
-    justify-content: center;
+    width: 100%;
     padding: 8px 16px;
     background: var(--file-name-bg, linear-gradient(135deg, rgba(64, 158, 255, 0.08) 0%, rgba(64, 158, 255, 0.03) 100%));
     border-radius: 10px;
@@ -183,6 +188,7 @@ export default {
     border: 1px solid var(--file-name-border, rgba(64, 158, 255, 0.12));
     backdrop-filter: blur(4px);
     transition: all 0.3s ease;
+    box-sizing: border-box;
 }
 .upload-list-item-name-wrapper:hover {
     background: var(--file-name-hover-bg, linear-gradient(135deg, rgba(64, 158, 255, 0.12) 0%, rgba(64, 158, 255, 0.06) 100%));
@@ -191,16 +197,17 @@ export default {
 .upload-list-item-name {
     font-size: 14px;
     font-weight: 600;
-    max-width: 28vw;
+    width: 100%;
     color: var(--el-text-color-primary);
     letter-spacing: 0.3px;
-    text-align: center;
+    word-break: break-all;
+    line-height: 1.4;
 }
 
 /* Progress Bar */
 .upload-list-item-progress {
     margin-top: 8px;
-    width: 28vw;
+    width: 100%;
     padding: 4px 8px;
     background: var(--progress-wrapper-bg, linear-gradient(135deg, rgba(64, 158, 255, 0.05) 0%, rgba(64, 158, 255, 0.02) 100%));
     border-radius: 12px;
@@ -427,16 +434,16 @@ export default {
 
 /* Mobile */
 @media (max-width: 768px) {
-    .upload-list-item-content {
-        margin-left: 2px;
+    .upload-list-item-preview {
+        width: 64px;
     }
-    .upload-list-item-url-row {
-        width: 42vw;
-        flex-direction: column;
-        gap: 6px;
+    .file-icon {
+        font-size: 22px;
+    }
+    .upload-list-item-url {
+        grid-template-columns: 1fr;
     }
     .upload-list-item-progress {
-        width: 32vw;
         padding: 3px 6px;
     }
     .upload-list-item-progress :deep(.el-progress-bar__outer) {
@@ -465,7 +472,6 @@ export default {
     }
     .upload-list-item-name {
         font-size: 12px;
-        width: 32vw;
     }
 }
 </style>
