@@ -1,5 +1,9 @@
 <template>
     <div class="security-settings" v-loading="loading">
+        <div class="page-header">
+            <h3 class="page-title">{{ $t('sysConfigTabs.securitySettings') }}</h3>
+        </div>
+
         <!-- 一级设置：认证管理 -->
         <div class="first-settings">
             <h3 class="first-title">{{ $t('sysSecurity.authManagement') }}</h3>
@@ -808,21 +812,38 @@ mounted() {
 
 <style scoped>
 .security-settings {
-    padding: 20px;
+    padding: 18px 0 28px;
     min-height: 500px;
 }
 
+.page-header {
+    margin-bottom: 14px;
+}
+
+.page-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--flat-border);
+    font-size: 20px;
+    font-weight: 600;
+}
+
 .first-settings {
-    margin-bottom: 40px;
+    margin-bottom: 24px;
 }
 
 .first-title {
     display: flex;
     align-items: center;
     gap: 8px;
-    margin-bottom: 20px;
-    padding-bottom: 12px;
-    border-bottom: 2px solid var(--el-color-primary-light-7);
+    margin: 0 0 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--flat-border);
+    font-size: 17px;
+    font-weight: 600;
 }
 
 .second-title {
@@ -831,43 +852,48 @@ mounted() {
     gap: 8px;
     text-align: start;
     margin-left: 0;
-    margin-bottom: 16px;
+    margin-bottom: 12px;
     padding-bottom: 8px;
-    border-bottom: 1px solid var(--el-border-color-lighter);
+    border-bottom: 1px solid var(--flat-border);
+    color: var(--flat-text);
 }
 
-/* 表单样式 - 一行 4 列网格布局，节省纵向空间 */
+/* 表单样式 */
 .first-settings :deep(.el-form) {
-    padding: 16px 20px;
-    background: var(--glass-bg);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-radius: 12px;
-    border: 1px solid var(--glass-border);
-    margin-bottom: 20px;
-    box-shadow: var(--glass-shadow);
-    transition: all 0.3s ease;
+    padding: 16px;
+    background: var(--flat-surface);
+    border-radius: 8px;
+    border: 1px solid var(--flat-border);
+    margin-bottom: 18px;
+    box-shadow: none;
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    column-gap: 24px;
-    row-gap: 4px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px 16px;
 }
 
 .first-settings :deep(.el-form:hover) {
-    box-shadow: var(--glass-shadow-hover);
-    background: var(--glass-bg-hover);
+    border-color: var(--flat-border-strong);
+    background: var(--flat-surface);
 }
 
 .first-settings :deep(.el-form-item) {
-    margin-bottom: 12px;
+    margin-bottom: 0;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     min-width: 0;
+    background: var(--flat-surface-soft);
+    border: 1px solid var(--flat-border);
+    border-radius: 8px;
+    padding: 12px 14px;
 }
 
 .first-settings :deep(.el-form-item:last-child) {
     margin-bottom: 0;
+}
+
+.first-settings :deep(.el-form-item:only-child) {
+    grid-column: 1 / -1;
 }
 
 .first-settings :deep(.el-form-item__label) {
@@ -937,13 +963,11 @@ mounted() {
 
 .token-table {
     width: 100%;
-    border-radius: 12px !important;
+    border-radius: 8px !important;
     overflow: hidden;
-    box-shadow: var(--glass-shadow);
-    background: var(--glass-bg);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid var(--glass-border);
+    box-shadow: none;
+    background: var(--flat-surface);
+    border: 1px solid var(--flat-border);
 }
 
 .token-table :deep(.el-table__header-wrapper) {
@@ -1015,8 +1039,8 @@ mounted() {
 /* 响应式布局 */
 @media (max-width: 768px) {
     .security-settings {
-        padding: 15px;
-        padding-bottom: 80px; /* 为悬浮按钮留出空间 */
+        padding: 12px;
+        padding-bottom: 80px;
     }
     
     .first-settings :deep(.el-form) {

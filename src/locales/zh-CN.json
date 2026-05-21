@@ -379,6 +379,10 @@
     "logout": "退出登录"
   },
   "sysConfigTabs": {
+    "groupRuntime": "运行",
+    "groupUpload": "上传",
+    "groupAccess": "访问",
+    "groupMore": "扩展",
     "systemStatus": "系统状态",
     "channelManagement": "渠道管理",
     "uploadSettings": "上传设置",
@@ -451,8 +455,12 @@
   }
 ,
   "sysUpload": {
-    "title": "上传渠道管理",
+    "title": "渠道管理",
     "titleTooltip": "管理所有上传渠道的配置，点击卡片查看详情或编辑",
+    "totalChannels": "渠道总数",
+    "enabledChannels": "已启用",
+    "channelTypes": "渠道类型",
+    "loadBalanceEnabled": "已开负载均衡",
     "filterPlaceholder": "筛选渠道类型",
     "addChannel": "添加渠道",
     "loadBalance": "负载均衡",

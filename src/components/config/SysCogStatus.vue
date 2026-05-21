@@ -1,5 +1,9 @@
 <template>
   <div class="status-panel" v-loading="loading">
+    <div class="page-header">
+      <h3 class="first-title">{{ $t('sysConfigTabs.systemStatus') }}</h3>
+    </div>
+
     <!-- 顶部概览卡片 -->
     <div class="overview-cards">
       <div class="overview-card total-files" @click="fetchIndexInfo">
@@ -917,9 +921,25 @@ export default {
 
 <style scoped>
 .status-panel {
-  padding: 20px;
+  padding: 18px 0 28px;
   background: transparent;
   min-height: 100vh;
+}
+
+.page-header {
+  margin-bottom: 14px;
+}
+
+.first-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--flat-border);
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--flat-text);
 }
 
 /* 概览卡片 */
@@ -959,8 +979,19 @@ export default {
   justify-content: center;
   font-size: 24px;
   margin-right: 20px;
-  background: linear-gradient(135deg, #60A5FA, #93C5FD);
   color: white;
+}
+
+.total-files .card-icon {
+  background: linear-gradient(135deg, #3B82F6, #06B6D4);
+}
+
+.index-status .card-icon {
+  background: linear-gradient(135deg, #11998e, #38ef7d);
+}
+
+.system-version .card-icon {
+  background: linear-gradient(135deg, #667eea, #764ba2);
 }
 
 .card-content {

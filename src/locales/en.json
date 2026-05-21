@@ -374,6 +374,10 @@
     "logout": "Logout"
   },
   "sysConfigTabs": {
+    "groupRuntime": "Runtime",
+    "groupUpload": "Upload",
+    "groupAccess": "Access",
+    "groupMore": "More",
     "systemStatus": "System Status",
     "channelManagement": "Channel Management",
     "uploadSettings": "Upload Settings",
@@ -445,8 +449,12 @@
     "cancellingRebuild": "Cancelling index rebuild..."
   },
   "sysUpload": {
-    "title": "Upload Channel Management",
+    "title": "Channel Management",
     "titleTooltip": "Manage all upload channel configurations. Click a card to view details or edit",
+    "totalChannels": "Total Channels",
+    "enabledChannels": "Enabled",
+    "channelTypes": "Channel Types",
+    "loadBalanceEnabled": "Load Balance On",
     "filterPlaceholder": "Filter channel type",
     "addChannel": "Add Channel",
     "loadBalance": "Load Balance",

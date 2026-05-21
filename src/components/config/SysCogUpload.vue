@@ -22,6 +22,29 @@
             </div>
         </div>
 
+        <div class="channel-overview">
+            <button class="overview-chip is-total" :class="{ 'is-active': !channelFilter }" @click="channelFilter = ''">
+                <font-awesome-icon icon="layer-group" class="overview-icon"/>
+                <span class="overview-label">{{ $t('sysUpload.totalChannels') }}</span>
+                <strong>{{ totalChannelCount }}</strong>
+            </button>
+            <div class="overview-chip">
+                <font-awesome-icon icon="check-circle" class="overview-icon"/>
+                <span class="overview-label">{{ $t('sysUpload.enabledChannels') }}</span>
+                <strong>{{ enabledChannelCount }}</strong>
+            </div>
+            <div class="overview-chip">
+                <font-awesome-icon icon="server" class="overview-icon"/>
+                <span class="overview-label">{{ $t('sysUpload.channelTypes') }}</span>
+                <strong>{{ configuredTypeCount }}/{{ channels.length }}</strong>
+            </div>
+            <div class="overview-chip">
+                <font-awesome-icon icon="random" class="overview-icon"/>
+                <span class="overview-label">{{ $t('sysUpload.loadBalanceEnabled') }}</span>
+                <strong>{{ loadBalanceEnabledCount }}</strong>
+            </div>
+        </div>
+
         <!-- 渠道卡片列表 - 按类型分组 -->
         <div v-for="channelType in filteredChannels" :key="channelType.value" class="channel-group">
             <div class="group-header">
@@ -633,6 +656,20 @@ computed: {
         }
         return this.channels.filter(ch => ch.value === this.channelFilter);
     },
+    totalChannelCount() {
+        return this.channels.reduce((sum, ch) => sum + this.getChannelList(ch.value).length, 0);
+    },
+    enabledChannelCount() {
+        return this.channels.reduce((sum, ch) => {
+            return sum + this.getChannelList(ch.value).filter(channel => channel.enabled).length;
+        }, 0);
+    },
+    configuredTypeCount() {
+        return this.channels.filter(ch => this.getChannelList(ch.value).length > 0).length;
+    },
+    loadBalanceEnabledCount() {
+        return this.channels.filter(ch => this.hasLoadBalance(ch.value) && this.getSettings(ch.value)?.loadBalance?.enabled).length;
+    },
     addRules() {
         return {
             type: [{ required: true, message: this.$t('sysUpload.channelTypePlaceholder'), trigger: 'change' }],
@@ -1211,7 +1248,7 @@ mounted() {
 
 <style scoped>
 .upload-settings {
-    padding: 20px;
+    padding: 18px 0 28px;
     min-height: 500px;
     overflow-x: hidden;
 }
@@ -1221,7 +1258,7 @@ mounted() {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 24px;
+    margin-bottom: 14px;
     flex-wrap: wrap;
     gap: 12px;
 }
@@ -1254,21 +1291,72 @@ mounted() {
     border-radius: 8px;
 }
 
+.channel-overview {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.overview-chip {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 54px;
+    padding: 12px 14px;
+    border: 1px solid var(--flat-border);
+    border-radius: 8px;
+    background: var(--flat-surface);
+    color: var(--flat-text);
+    box-sizing: border-box;
+    text-align: left;
+}
+
+button.overview-chip {
+    cursor: pointer;
+}
+
+.overview-chip.is-active,
+.overview-chip:hover {
+    border-color: var(--flat-border-strong);
+    background: var(--flat-surface-soft);
+}
+
+.overview-icon {
+    width: 18px;
+    color: var(--flat-primary);
+    flex-shrink: 0;
+}
+
+.overview-label {
+    flex: 1;
+    min-width: 0;
+    color: var(--flat-text-muted);
+    font-size: 13px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.overview-chip strong {
+    color: var(--flat-text);
+    font-size: 18px;
+    line-height: 1;
+}
+
 /* 渠道分组 */
 .channel-group {
-    margin-bottom: 32px;
-    background: var(--glass-bg);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-radius: 12px;
-    border: 1px solid var(--glass-border);
+    margin-bottom: 18px;
+    background: var(--flat-surface);
+    border-radius: 8px;
+    border: 1px solid var(--flat-border);
     overflow: hidden;
-    box-shadow: var(--glass-shadow);
-    transition: all 0.3s ease;
+    box-shadow: none;
+    transition: border-color 0.2s ease;
 }
 
 .channel-group:hover {
-    box-shadow: var(--glass-shadow-hover);
+    border-color: var(--flat-border-strong);
 }
 
 .group-header {
@@ -1276,8 +1364,8 @@ mounted() {
     justify-content: space-between;
     align-items: center;
     padding: 16px 20px;
-    background: var(--glass-header-bg);
-    border-bottom: 1px solid var(--glass-header-border);
+    background: var(--flat-surface-soft);
+    border-bottom: 1px solid var(--flat-border);
 }
 
 .group-title {
@@ -1314,23 +1402,21 @@ mounted() {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 16px;
-    padding: 20px;
+    padding: 16px;
 }
 
 /* 单个渠道卡片 */
 .channel-card {
-    background: var(--glass-bg);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border-radius: 10px;
-    border: 1px solid var(--glass-border);
+    background: var(--flat-surface);
+    border-radius: 8px;
+    border: 1px solid var(--flat-border);
     border-left: 3px solid var(--el-border-color-light);
     transition: all 0.25s ease;
     overflow: hidden;
     position: relative;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    box-shadow: none;
 }
 
 /* 光斑效果 */
@@ -1372,9 +1458,9 @@ mounted() {
 }
 
 .channel-card:hover {
-    border-color: var(--glass-border-hover);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-    background: var(--glass-bg-hover);
+    border-color: var(--flat-border-strong);
+    box-shadow: none;
+    background: var(--flat-surface);
 }
 
 .channel-card.disabled {
@@ -1417,8 +1503,8 @@ mounted() {
     justify-content: space-between;
     align-items: center;
     padding: 14px 16px;
-    background: var(--glass-header-bg);
-    border-bottom: 1px solid var(--glass-header-border);
+    background: var(--flat-surface-soft);
+    border-bottom: 1px solid var(--flat-border);
 }
 
 .card-title {
@@ -1495,8 +1581,8 @@ mounted() {
     justify-content: flex-end;
     gap: 4px;
     padding: 10px 16px;
-    border-top: 1px solid var(--glass-header-border);
-    background: var(--glass-header-bg);
+    border-top: 1px solid var(--flat-border);
+    background: var(--flat-surface-soft);
     margin-top: auto;
 }
 
@@ -1611,6 +1697,10 @@ mounted() {
     .page-header {
         flex-direction: column;
         align-items: flex-start;
+    }
+
+    .channel-overview {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     .channel-cards {

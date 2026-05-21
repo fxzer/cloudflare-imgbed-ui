@@ -73,15 +73,15 @@ export default {
 }
 
 .tabs-segmented {
-    --el-segmented-bg-color: rgba(99, 102, 241, 0.06);
-    --el-segmented-item-selected-bg-color: linear-gradient(135deg, #6366f1, #8b5cf6);
+    --el-segmented-bg-color: var(--flat-surface-soft);
+    --el-segmented-item-selected-bg-color: var(--flat-primary);
     --el-segmented-item-selected-color: #ffffff;
     --el-border-radius-base: 10px;
     min-height: 42px;
     padding: 4px;
     border-radius: 12px;
-    background: rgba(99, 102, 241, 0.06);
-    border: 1px solid rgba(99, 102, 241, 0.12);
+    background: var(--flat-surface-soft);
+    border: 1px solid var(--flat-border);
 }
 
 .tabs-segmented :deep(.el-segmented__item) {
@@ -91,9 +91,9 @@ export default {
 }
 
 .tabs-segmented :deep(.el-segmented__item-selected) {
-    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    background: var(--flat-primary);
     color: #ffffff;
-    border: 1px solid rgba(255, 255, 255, 0.36);
+    border: 1px solid var(--flat-primary);
 }
 
 .tabs-segmented-item {
@@ -106,7 +106,7 @@ export default {
 }
 
 .tabs-segmented-icon {
-    font-size: 0.95em;
+    font-size: 1em;
     width: 16px;
 }
 

@@ -2029,36 +2029,30 @@ mounted() {
     padding: 10px 24px;
     /* macOS 风格毛玻璃效果 */
     background: rgba(255, 255, 255, 0.72);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
     /* 顶部边框形成玻璃边缘光泽 */
     border: 1px solid rgba(255, 255, 255, 0.3);
     border-top: 1px solid rgba(255, 255, 255, 0.5);
     /* 悬浮阴影效果 */
-    box-shadow: 
-        0 4px 30px rgba(0, 0, 0, 0.1),
-        0 1px 3px rgba(0, 0, 0, 0.05),
-        inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    box-shadow: none;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     border-radius: 16px;
     position: fixed;
     top: 8px;
     left: 50%;
     transform: translateX(-50%);
-    width: calc(95% - 16px);
+    width: 80vw;
     z-index: 2001;
     min-height: 45px;
 }
 
 /* 深色模式毛玻璃效果 */
 html.dark .header-content {
-    background: rgba(30, 30, 30, 0.75);
+    background: var(--flat-surface);
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-top: 1px solid rgba(255, 255, 255, 0.12);
-    box-shadow: 
-        0 4px 30px rgba(0, 0, 0, 0.3),
-        0 1px 3px rgba(0, 0, 0, 0.2),
-        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    box-shadow: none;
 }
 
 
@@ -2066,14 +2060,14 @@ html.dark .header-content {
     .header-content {
         flex-direction: column;
         top: 6px;
-        width: calc(100% - 32px);
+        width: 90vw;
         border-radius: 14px;
         padding: 6px 12px;
         gap: 4px;
     }
     
     .header-icon {
-        font-size: 0.95em;
+        font-size: 1em;
     }
     
     .header-content .actions {
@@ -2096,20 +2090,14 @@ html.dark .header-content {
 }
 
 .header-content:hover {
-    background: rgba(255, 255, 255, 0.82);
-    box-shadow: 
-        0 8px 40px rgba(0, 0, 0, 0.12),
-        0 2px 6px rgba(0, 0, 0, 0.08),
-        inset 0 1px 0 rgba(255, 255, 255, 0.5);
-    transform: translateX(-50%) translateY(-1px);
+    background: var(--flat-surface);
+    box-shadow: none;
+    transform: translateX(-50%);
 }
 
 html.dark .header-content:hover {
-    background: rgba(35, 35, 35, 0.85);
-    box-shadow: 
-        0 8px 40px rgba(0, 0, 0, 0.4),
-        0 2px 6px rgba(0, 0, 0, 0.3),
-        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    background: var(--flat-surface);
+    box-shadow: none;
 }
 
 .header-icon {
@@ -2133,6 +2121,7 @@ html.dark .header-content:hover {
     justify-content: space-between;
     gap: 12px;
     padding: 0 10px; /* 与 .content 的 padding 对齐 */
+    margin-top: 8px; /* 与下方内容的间距 */
     margin-bottom: 4px; /* 与下方内容的间距 */
 }
 
@@ -2151,7 +2140,7 @@ html.dark .header-content:hover {
     display: inline-flex;
     align-items: center;
     gap: 5px;
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 500;
     color: var(--el-text-color-secondary);
     background: var(--el-fill-color-light);
@@ -2342,13 +2331,15 @@ html.dark .header-content:hover {
 .main-container {
     display: flex;
     flex-direction: column;
-    padding: 20px 60px;
     min-height: calc(100vh - 80px);
+    width: 80vw;
+    margin: 0 auto;
 }
 
 @media (max-width: 768px) {
     .main-container {
         margin-top: 12vh;
+        width: 90vw;
     }
 }
 
@@ -2719,7 +2710,7 @@ html.dark .header-content:hover {
     padding: 8px 12px;
     background-color: var(--el-bg-color);
     border-radius: 6px;
-    font-size: 0.95em;
+    font-size: 1em;
     box-shadow: var(--admin-dashboard-stats-shadow);
     transition: all 0.3s ease;
 }

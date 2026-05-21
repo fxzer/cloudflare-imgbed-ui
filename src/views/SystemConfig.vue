@@ -133,6 +133,11 @@ export default {
 </script>
 <style scoped>
 .container {
+    --sys-sidebar-left: 10vw;
+    --sys-sidebar-width: 208px;
+    --sys-sidebar-collapsed-width: 56px;
+    --sys-content-gap: 24px;
+    --sys-content-right: 10vw;
     background: var(--admin-container-bg-color);
     min-height: 100vh;
     font-family: 'Arial', sans-serif;
@@ -146,71 +151,68 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 24px;
+    padding: 12px 24px;
     /* macOS 风格毛玻璃效果 */
     background: rgba(255, 255, 255, 0.72);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
     /* 顶部边框形成玻璃边缘光泽 */
     border: 1px solid rgba(255, 255, 255, 0.3);
     border-top: 1px solid rgba(255, 255, 255, 0.5);
     /* 悬浮阴影效果 */
-    box-shadow: 
-        0 4px 30px rgba(0, 0, 0, 0.1),
-        0 1px 3px rgba(0, 0, 0, 0.05),
-        inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    box-shadow: none;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     border-radius: 16px;
     position: fixed;
     top: 8px;
     left: 50%;
     transform: translateX(-50%);
-    width: calc(95% - 16px);
+    width: 80vw;
     z-index: 2001;
-    min-height: 45px;
+    min-height: 48px;
 }
+
 
 /* 深色模式毛玻璃效果 */
 html.dark .header-content {
-    background: rgba(30, 30, 30, 0.75);
+    background: var(--flat-surface);
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-top: 1px solid rgba(255, 255, 255, 0.12);
-    box-shadow: 
-        0 4px 30px rgba(0, 0, 0, 0.3),
-        0 1px 3px rgba(0, 0, 0, 0.2),
-        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    box-shadow: none;
 }
 
 @media (max-width: 768px) {
+    .container {
+        --sys-sidebar-left: 8px;
+        --sys-sidebar-width: 172px;
+        --sys-sidebar-collapsed-width: 52px;
+        --sys-content-gap: 16px;
+        --sys-content-right: 12px;
+    }
+
     .header-content {
         flex-direction: column;
-        top: 6px;
-        width: calc(100% - 32px);
+        top: 8px;
+        width: 90vw;
         border-radius: 14px;
-        padding: 6px 12px;
+        padding: 8px 12px;
         gap: 4px;
     }
     
     .header-icon {
-        font-size: 0.95em;
+        font-size: 1em;
     }
 }
 
 .header-content:hover {
-    background: rgba(255, 255, 255, 0.82);
-    box-shadow: 
-        0 8px 40px rgba(0, 0, 0, 0.12),
-        0 2px 6px rgba(0, 0, 0, 0.08),
-        inset 0 1px 0 rgba(255, 255, 255, 0.5);
-    transform: translateX(-50%) translateY(-1px);
+    background: var(--flat-surface);
+    box-shadow: none;
+    transform: translateX(-50%);
 }
 
 html.dark .header-content:hover {
-    background: rgba(35, 35, 35, 0.85);
-    box-shadow: 
-        0 8px 40px rgba(0, 0, 0, 0.4),
-        0 2px 6px rgba(0, 0, 0, 0.3),
-        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    background: var(--flat-surface);
+    box-shadow: none;
 }
 
 .header-icon {
@@ -223,13 +225,13 @@ html.dark .header-content:hover {
 
 .header-icon:hover {
     color: #B39DDB; /* 使用柔和的淡紫色 */
-    transform: scale(1.2);
+    transform: none;
 }
 
 .header-action {
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 16px;
 }
 
 .header-theme-toggle,
@@ -239,29 +241,40 @@ html.dark .header-content:hover {
 }
 
 .header-language-switcher {
-    --lang-icon-size: 1.3em;
+    --lang-control-size: 36px;
+    --lang-control-radius: 10px;
+    --lang-icon-size: 14px;
     --lang-icon-color: var(--admin-theme-toggle-color);
+    --lang-control-bg: var(--flat-surface);
+    --lang-control-border: var(--flat-border);
 }
 
 .main-container {
-  margin-top: 60px;
-  transition: margin-left 0.3s ease, width 0.3s ease; /* 添加过渡效果 */
-  width: calc(100% - 280px); /* 默认宽度（侧边栏展开时） */
-  margin-left: 170px; /* 默认左边距（侧边栏展开时） */
+  margin-top: 40px;
+  margin-left: calc(var(--sys-sidebar-left) + var(--sys-sidebar-width) + var(--sys-content-gap));
+  margin-right: var(--sys-content-right);
+  padding-bottom: 24px;
+  box-sizing: border-box;
+  transition: margin-left 0.3s ease, width 0.3s ease;
+  width: calc(100vw - var(--sys-sidebar-left) - var(--sys-sidebar-width) - var(--sys-content-gap) - var(--sys-content-right));
+  max-width: calc(100vw - var(--sys-sidebar-left) - var(--sys-sidebar-width) - var(--sys-content-gap) - var(--sys-content-right));
 }
 
 .main-container.collapsed {
-  width: calc(100% - 150px); /* 折叠时的宽度 */
-  margin-left: 80px; /* 折叠时的左边距 */
+  margin-left: calc(var(--sys-sidebar-left) + var(--sys-sidebar-collapsed-width) + var(--sys-content-gap));
+  width: calc(100vw - var(--sys-sidebar-left) - var(--sys-sidebar-collapsed-width) - var(--sys-content-gap) - var(--sys-content-right));
+  max-width: calc(100vw - var(--sys-sidebar-left) - var(--sys-sidebar-collapsed-width) - var(--sys-content-gap) - var(--sys-content-right));
 }
 
 /* 移动端不压缩内容，但让出折叠侧边栏宽度 */
 @media (max-width: 768px) {
   .main-container,
   .main-container.collapsed {
-    width: auto;
-    margin-left: 65px;
-    margin-right: 15px;
+    margin-top: 96px;
+    width: calc(100vw - var(--sys-sidebar-left) - var(--sys-sidebar-collapsed-width) - var(--sys-content-gap) - var(--sys-content-right));
+    max-width: calc(100vw - var(--sys-sidebar-left) - var(--sys-sidebar-collapsed-width) - var(--sys-content-gap) - var(--sys-content-right));
+    margin-left: calc(var(--sys-sidebar-left) + var(--sys-sidebar-collapsed-width) + var(--sys-content-gap));
+    margin-right: var(--sys-content-right);
     padding: 0;
     min-height: calc(100vh - 60px);
     box-sizing: border-box;

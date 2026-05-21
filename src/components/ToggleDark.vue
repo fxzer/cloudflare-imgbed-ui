@@ -1,60 +1,19 @@
 <template>
-    <div
+    <button
       id="themeToggle"
+      type="button"
       @click="handleToggleClick"
+      :title="toggleTitle"
+      :aria-label="toggleTitle"
     >
       <transition name="icon-fade" mode="out-in">
-        <svg
-          v-if="!isAuto"
-          key="sun-moon"
-          class="theme_toggle_svg"
-          :class="{ 'dark': isDark }"
-          width="1.5em"
-          height="1.5em"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke="currentColor"
-        >
-          <mask id="themeMask">
-            <rect x="0" y="0" width="100%" height="100%" fill="white"></rect>
-            <circle
-              class="theme_toggle_circle1"
-              fill="black"
-              :cx="isDark ? '50%' : '100%'"
-              :cy="isDark ? '23%' : '0%'"
-              :r="isDark ? '9' : '5'"
-            ></circle>
-          </mask>
-          <circle
-            class="theme_toggle_circle2"
-            cx="12"
-            cy="12"
-            :r="isDark ? '9' : '5'"
-            mask="url(#themeMask)"
-          ></circle>
-          <g class="theme_toggle_g" stroke="currentColor" :opacity="isDark ? 0 : 1">
-            <line x1="12" y1="1" x2="12" y2="3"></line>
-            <line x1="12" y1="21" x2="12" y2="23"></line>
-            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-            <line x1="1" y1="12" x2="3" y2="12"></line>
-            <line x1="21" y1="12" x2="23" y2="12"></line>
-            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-          </g>
-        </svg>
         <font-awesome-icon 
-          v-else 
-          key="auto-mode"
-          icon="circle-half-stroke" 
-          class="auto-icon"
-          style="font-size: 1.5em; color: var(--theme-toggle-color);" 
+          :key="themeIcon"
+          :icon="themeIcon"
+          class="theme-toggle-icon"
         />
       </transition>
-    </div>
+    </button>
 </template>
   
 <script>
@@ -65,6 +24,16 @@ export default {
       isDark: this.$store.getters.useDarkMode,
       isAuto: !this.$store.getters.cusDarkMode,
     };
+  },
+  computed: {
+    themeIcon() {
+      if (this.isAuto) return 'circle-half-stroke';
+      return this.isDark ? 'moon' : 'sun';
+    },
+    toggleTitle() {
+      if (this.isAuto) return '跟随系统';
+      return this.isDark ? '暗色模式' : '亮色模式';
+    }
   },
   methods: {
     handleToggleClick() {
@@ -92,57 +61,47 @@ export default {
 
 <style scoped>
 #themeToggle {
-  border: none;
+  border: 1px solid var(--theme-toggle-border, var(--flat-border, rgba(255, 255, 255, 0.18)));
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 2.5rem;
-  height: 2.5rem;
+  width: var(--theme-toggle-size, 40px);
+  height: var(--theme-toggle-size, 40px);
+  padding: 0;
+  border-radius: var(--theme-toggle-radius, 12px);
+  background: var(--theme-toggle-control-bg, var(--toolbar-button-bg-color, transparent));
+  color: var(--theme-toggle-color);
+  box-sizing: border-box;
+  box-shadow: none;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+#themeToggle:hover {
+  border-color: var(--flat-border-strong, var(--el-color-primary));
+  background: var(--flat-surface-soft, var(--toolbar-button-bg-color, transparent));
 }
 @media (max-width: 768px) {
   #themeToggle {
-    width: 2rem;
-    height: 2rem;
+    width: var(--theme-toggle-mobile-size, 32px);
+    height: var(--theme-toggle-mobile-size, 32px);
   }
-}
-
-.theme_toggle_circle1 {
-  transition: cx 0.5s ease-in-out, cy 0.5s ease-in-out, r 0.5s ease-in-out;
-}
-
-.theme_toggle_circle2 {
-  transition: all 0.5s ease-in-out;
-  fill: var(--theme-toggle-bg-color);
-}
-
-.theme_toggle_svg {
-  transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-  /* transform: rotate(90deg); */
-  color: var(--theme-toggle-color);
-}
-.dark.theme_toggle_svg {
-  transform: rotate(40deg);
-}
-
-.theme_toggle_g {
-  transition: opacity 0.5s ease-in-out;
 }
 
 /* 图标切换过渡效果 */
 .icon-fade-enter-active,
 .icon-fade-leave-active {
-  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+  transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
 .icon-fade-enter-from {
   opacity: 0;
-  transform: scale(0.8) rotate(-90deg);
+  transform: scale(0.88);
 }
 
 .icon-fade-leave-to {
   opacity: 0;
-  transform: scale(0.8) rotate(90deg);
+  transform: scale(0.88);
 }
 
 .icon-fade-enter-to,
@@ -151,7 +110,10 @@ export default {
   transform: scale(1) rotate(0deg);
 }
 
-.auto-icon {
+.theme-toggle-icon {
   display: inline-block;
+  width: 16px;
+  font-size: 16px;
+  color: currentColor;
 }
 </style>

@@ -1541,9 +1541,9 @@ beforeDestroy() {
     justify-content: center;
     border-radius: 15px;
     background-color: var(--upload-list-card-bg-color);
-    backdrop-filter: blur(10px);
+    backdrop-filter: none;
     border: var(--upload-list-card-border);
-    box-shadow: var(--upload-list-card-box-shadow) !important;
+    box-shadow: none !important;
     transition: height 0.3s ease;
     overflow: hidden;
 }
@@ -1576,9 +1576,7 @@ beforeDestroy() {
 /* 上传时列表卡片边框效果 - 与流光颜色一致 */
 .upload-list-card.is-uploading {
     border: 1px solid var(--el-upload-dragger-uniform-color, #409eff) !important;
-    box-shadow: 0 0 20px color-mix(in srgb, var(--el-upload-dragger-uniform-color, #409eff) 30%, transparent),
-                0 0 40px color-mix(in srgb, var(--el-upload-dragger-uniform-color, #409eff) 15%, transparent),
-                inset 0 0 20px color-mix(in srgb, var(--el-upload-dragger-uniform-color, #409eff) 8%, transparent) !important;
+    box-shadow: none !important;
 }
 
 /* 拖拽上传卡片包装器 - 用于悬浮光斑效果 */
@@ -1624,19 +1622,21 @@ beforeDestroy() {
     border: var(--el-upload-dragger-border);
     opacity: 0.7;
     background-color: var(--el-upload-dragger-bg-color);
-    backdrop-filter: blur(10px);
-    transition: all 0.3s ease;
+    backdrop-filter: none;
+    transition: border-color 0.2s ease, background-color 0.2s ease, opacity 0.2s ease;
 }
 :deep(.el-upload:focus .el-upload-dragger) {
     border-color: var(--el-upload-dragger-border-color);
 }
 :deep(.el-upload-dragger:hover) {
     opacity: 0.8;
-    box-shadow: var(--el-upload-dragger-hover-box-shadow);
+    box-shadow: none;
+    border-color: var(--flat-primary);
 }
 :deep(.el-upload-dragger.is-dragover) {
     opacity: 0.8;
-    box-shadow: var(--el-upload-dragger-hover-box-shadow);
+    box-shadow: none;
+    border-color: var(--flat-primary);
 }
 .is-uploading :deep(.el-upload-dragger) {
     border-color: transparent !important;
@@ -1720,13 +1720,14 @@ beforeDestroy() {
     box-shadow: none;
     opacity: 0.7;
     background-color: var(--el-upload-dragger-bg-color);
-    backdrop-filter: blur(10px);
-    transition: all 0.3s ease;
+    backdrop-filter: none;
+    transition: border-color 0.2s ease, background-color 0.2s ease, opacity 0.2s ease;
     box-sizing: border-box;
 }
 .paste-card:hover {
     opacity: 0.8;
-    box-shadow: var(--el-upload-dragger-hover-box-shadow);
+    box-shadow: none;
+    border-color: var(--flat-primary);
 }
 
 /* 粘贴卡片上传时的边缘流光效果 */
@@ -1780,9 +1781,10 @@ beforeDestroy() {
     width: 50vw;
     height: 70%;
     border-radius: 16px;
-    background: var(--textarea-bg, linear-gradient(135deg, rgba(64, 158, 255, 0.03) 0%, rgba(64, 158, 255, 0.01) 100%));
-    backdrop-filter: blur(12px);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background: var(--flat-surface);
+    backdrop-filter: none;
+    border: 1px solid var(--flat-border);
+    transition: border-color 0.2s ease, background-color 0.2s ease;
     box-sizing: border-box;
     display: flex;
     position: relative;
@@ -1792,18 +1794,7 @@ beforeDestroy() {
 }
 
 .upload-card-textarea::before {
-    content: '';
-    position: absolute;
-    inset: -1px;
-    border-radius: 17px;
-    padding: 1px;
-    background: linear-gradient(135deg, rgba(64, 158, 255, 0.3) 0%, rgba(64, 158, 255, 0.1) 50%, rgba(64, 158, 255, 0.3) 100%);
-    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    pointer-events: none;
-    opacity: 0.6;
-    transition: opacity 0.3s ease;
+    content: none;
 }
 
 .upload-card-textarea:hover::before {

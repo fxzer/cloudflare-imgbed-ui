@@ -1,42 +1,47 @@
 <template>
     <div class="page-settings" v-loading="loading">
+        <div class="page-header">
+            <h3 class="first-title">{{ $t('sysConfigTabs.pageSettings') }}</h3>
+        </div>
         <!-- 根据category分组显示设置 -->
-        <div v-for="(categoryGroup, categoryName) in groupedSettings" :key="categoryName" class="first-settings">
-            <h3 class="first-title">{{ categoryName }}</h3>
-            <el-form :model="settings" label-width="150px">
-                <el-form-item v-for="(setting, index) in categoryGroup" :key="setting.id">
-                    <template #label>
-                        {{ localized(setting, 'label') }}
-                        <el-tooltip v-if="setting.tooltip" :content="localized(setting, 'tooltip')" placement="top" raw-content>
-                            <font-awesome-icon icon="question-circle" style="margin-left: 5px; cursor: pointer;"/>
-                        </el-tooltip>
-                    </template>
-                    <!-- 如果是select类型则使用下拉选择器 -->
-                    <el-select v-if="setting.type === 'select'" v-model="setting.value" :disabled="setting.fixed" :placeholder="localized(setting, 'placeholder')" style="width: 100%">
-                        <el-option
-                            v-for="option in setting.options"
-                            :key="option.value"
-                            :label="localizedOption(option)"
-                            :value="option.value">
-                        </el-option>
-                    </el-select>
-                    <!-- 如果是channelName类型则使用渠道名选择器 -->
-                    <el-select v-else-if="setting.type === 'channelName'" v-model="setting.value" :disabled="!currentUploadChannel || currentChannelList.length === 0" :placeholder="$t('sysPage.channelSelectPlaceholder')" clearable style="width: 100%">
-                        <el-option
-                            v-for="ch in currentChannelList"
-                            :key="ch.name"
-                            :label="ch.name"
-                            :value="ch.name">
-                        </el-option>
-                    </el-select>
-                    <!-- 如果是boolean类型则使用切换按钮 -->
-                    <el-switch v-else-if="setting.type === 'boolean'" v-model="setting.value" :disabled="setting.fixed"></el-switch>
-                    <!-- 如果是textarea类型则使用可拖拽文本域 -->
-                    <el-input v-else-if="setting.type === 'textarea'" v-model="setting.value" type="textarea" :autosize="{ minRows: 2 }" resize="vertical" :disabled="setting.fixed" :placeholder="localized(setting, 'placeholder')"></el-input>
-                    <!-- 否则使用输入框 -->
-                    <el-input v-else v-model="setting.value" :disabled="setting.fixed" :placeholder="localized(setting, 'placeholder')"></el-input>
-                </el-form-item>
-            </el-form>
+        <div class="settings-stack">
+            <section v-for="(categoryGroup, categoryName) in groupedSettings" :key="categoryName" class="first-settings">
+                <h3 class="section-title">{{ categoryName }}</h3>
+                <el-form :model="settings" label-width="150px">
+                    <el-form-item v-for="(setting, index) in categoryGroup" :key="setting.id">
+                        <template #label>
+                            {{ localized(setting, 'label') }}
+                            <el-tooltip v-if="setting.tooltip" :content="localized(setting, 'tooltip')" placement="top" raw-content>
+                                <font-awesome-icon icon="question-circle" class="section-help-icon"/>
+                            </el-tooltip>
+                        </template>
+                        <!-- 如果是select类型则使用下拉选择器 -->
+                        <el-select v-if="setting.type === 'select'" v-model="setting.value" :disabled="setting.fixed" :placeholder="localized(setting, 'placeholder')" style="width: 100%">
+                            <el-option
+                                v-for="option in setting.options"
+                                :key="option.value"
+                                :label="localizedOption(option)"
+                                :value="option.value">
+                            </el-option>
+                        </el-select>
+                        <!-- 如果是channelName类型则使用渠道名选择器 -->
+                        <el-select v-else-if="setting.type === 'channelName'" v-model="setting.value" :disabled="!currentUploadChannel || currentChannelList.length === 0" :placeholder="$t('sysPage.channelSelectPlaceholder')" clearable style="width: 100%">
+                            <el-option
+                                v-for="ch in currentChannelList"
+                                :key="ch.name"
+                                :label="ch.name"
+                                :value="ch.name">
+                            </el-option>
+                        </el-select>
+                        <!-- 如果是boolean类型则使用切换按钮 -->
+                        <el-switch v-else-if="setting.type === 'boolean'" v-model="setting.value" :disabled="setting.fixed"></el-switch>
+                        <!-- 如果是textarea类型则使用可拖拽文本域 -->
+                        <el-input v-else-if="setting.type === 'textarea'" v-model="setting.value" type="textarea" :autosize="{ minRows: 2 }" resize="vertical" :disabled="setting.fixed" :placeholder="localized(setting, 'placeholder')"></el-input>
+                        <!-- 否则使用输入框 -->
+                        <el-input v-else v-model="setting.value" :disabled="setting.fixed" :placeholder="localized(setting, 'placeholder')"></el-input>
+                    </el-form-item>
+                </el-form>
+            </section>
         </div>
 
     
@@ -173,65 +178,74 @@ mounted() {
 
 <style scoped>
 .page-settings {
-    padding: 20px;
+    padding: 18px 0 28px;
     min-height: 500px;
 }
 
+.page-header {
+    margin-bottom: 14px;
+}
+
 .first-settings {
-    margin-bottom: 40px;
+    margin-bottom: 0;
+    background: var(--flat-surface);
+    border: 1px solid var(--flat-border);
+    border-radius: 8px;
+    padding: 16px;
 }
 
 .first-title {
     display: flex;
     align-items: center;
     gap: 8px;
-    margin-bottom: 20px;
-    padding-bottom: 12px;
-    border-bottom: 2px solid var(--el-color-primary-light-7);
+    margin: 0;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--flat-border);
+    font-size: 20px;
+    font-weight: 600;
 }
 
-.second-title {
+.section-title {
     display: flex;
     align-items: center;
     gap: 8px;
     text-align: start;
-    margin-left: 0;
-    margin-bottom: 16px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid var(--el-border-color-lighter);
+    margin: 0 0 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--flat-border);
+    color: var(--flat-text);
+    font-size: 15px;
+    font-weight: 600;
 }
 
-/* 表单样式 - 一行 4 列网格布局，节省纵向空间 */
-.first-settings :deep(.el-form) {
-    padding: 16px 20px;
-    background: var(--glass-bg);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-radius: 12px;
-    border: 1px solid var(--glass-border);
-    box-shadow: var(--glass-shadow);
-    transition: all 0.3s ease;
+.section-help-icon {
+    color: var(--flat-text-muted);
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.settings-stack {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    column-gap: 24px;
-    row-gap: 4px;
+    gap: 14px;
 }
 
-.first-settings :deep(.el-form:hover) {
-    box-shadow: var(--glass-shadow-hover);
-    background: var(--glass-bg-hover);
+/* 表单样式 */
+.first-settings :deep(.el-form) {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px 16px;
 }
 
 .first-settings :deep(.el-form-item) {
-    margin-bottom: 12px;
+    margin-bottom: 0;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     min-width: 0;
-}
-
-.first-settings :deep(.el-form-item:last-child) {
-    margin-bottom: 0;
+    padding: 12px 14px;
+    background: var(--flat-surface-soft);
+    border: 1px solid var(--flat-border);
+    border-radius: 8px;
 }
 
 /* textarea 类项目跨 2 列展示 */
@@ -281,12 +295,11 @@ mounted() {
 /* 移动端适配 */
 @media (max-width: 768px) {
     .page-settings {
-        padding: 15px;
-        padding-bottom: 80px; /* 为悬浮按钮留出空间 */
+        padding: 12px;
+        padding-bottom: 80px;
     }
 
     .first-settings :deep(.el-form) {
-        padding: 12px 15px;
         grid-template-columns: 1fr;
     }
 

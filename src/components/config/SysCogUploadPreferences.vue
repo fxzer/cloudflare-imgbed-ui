@@ -5,12 +5,12 @@
         </div>
 
         <div class="settings-grid">
-            <section class="preference-panel panel-wide">
+            <section class="preference-panel panel-wide workflow-panel" data-step="01">
                 <div class="section-header">
                     <span class="section-title">{{ $t('uploadSettings.uploadChannel') }}</span>
                 </div>
-                <div class="section-content">
-                    <div class="setting-item">
+                <div class="section-content target-grid">
+                    <div class="setting-item setting-item-stack setting-item-full">
                         <span class="setting-label">{{ $t('uploadSettings.channelType') }}</span>
                         <el-radio-group v-model="uploadChannel" class="radio-card-group compact">
                             <el-radio label="telegram" class="radio-card">
@@ -76,67 +76,7 @@
                 </div>
             </section>
 
-            <section class="preference-panel">
-                <div class="section-header">
-                    <span class="section-title">{{ $t('uploadSettings.fileNaming') }}</span>
-                </div>
-                <div class="section-content">
-                    <el-radio-group v-model="uploadNameType" class="radio-card-group grid-2x2">
-                        <el-radio label="default" class="radio-card">
-                            <font-awesome-icon icon="cog" class="radio-icon"/>
-                            <span>{{ $t('uploadSettings.namingDefault') }}</span>
-                        </el-radio>
-                        <el-radio label="index" class="radio-card">
-                            <font-awesome-icon icon="hashtag" class="radio-icon"/>
-                            <span>{{ $t('uploadSettings.namingIndex') }}</span>
-                        </el-radio>
-                        <el-radio label="origin" class="radio-card">
-                            <font-awesome-icon icon="file-signature" class="radio-icon"/>
-                            <span>{{ $t('uploadSettings.namingOrigin') }}</span>
-                        </el-radio>
-                        <el-radio label="short" class="radio-card">
-                            <font-awesome-icon icon="compress-alt" class="radio-icon"/>
-                            <span>{{ $t('uploadSettings.namingShort') }}</span>
-                        </el-radio>
-                    </el-radio-group>
-                </div>
-            </section>
-
-            <section class="preference-panel">
-                <div class="section-header">
-                    <span class="section-title">{{ $t('settings.linkFormatTitle') }}</span>
-                </div>
-                <div class="section-content">
-                    <el-radio-group v-model="selectedUrlForm" class="radio-card-group grid-2x2">
-                        <el-radio label="url" class="radio-card">
-                            <font-awesome-icon icon="link" class="radio-icon"/>
-                            <span>{{ $t('settings.rawLink') }}</span>
-                        </el-radio>
-                        <el-radio label="md" class="radio-card">
-                            <font-awesome-icon icon="code" class="radio-icon"/>
-                            <span>Markdown</span>
-                        </el-radio>
-                        <el-radio label="html" class="radio-card">
-                            <font-awesome-icon icon="code-branch" class="radio-icon"/>
-                            <span>HTML</span>
-                        </el-radio>
-                        <el-radio label="ubb" class="radio-card">
-                            <font-awesome-icon icon="quote-right" class="radio-icon"/>
-                            <span>BBCode</span>
-                        </el-radio>
-                    </el-radio-group>
-                    <div class="setting-item link-custom-switch">
-                        <span class="setting-label">{{ $t('settings.enableCustom') }}</span>
-                        <el-switch v-model="useCustomUrl" active-value="true" inactive-value="false" />
-                    </div>
-                    <div class="setting-item" v-if="useCustomUrl === 'true'">
-                        <span class="setting-label">{{ $t('settings.customPrefix') }}</span>
-                        <el-input v-model="customUrlPrefix" :placeholder="$t('settings.customPrefixPlaceholder')" class="setting-input"/>
-                    </div>
-                </div>
-            </section>
-
-            <section class="preference-panel panel-wide">
+            <section class="preference-panel panel-wide workflow-panel" data-step="02">
                 <div class="section-header">
                     <span class="section-title">{{ $t('uploadSettings.filePreprocess') }}</span>
                     <el-tooltip :content="$t('uploadSettings.filePreprocessTooltip')" placement="top">
@@ -198,6 +138,67 @@
                     </div>
                 </div>
             </section>
+
+            <section class="preference-panel workflow-panel" data-step="03">
+                <div class="section-header">
+                    <span class="section-title">{{ $t('uploadSettings.fileNaming') }}</span>
+                </div>
+                <div class="section-content">
+                    <el-radio-group v-model="uploadNameType" class="radio-card-group grid-2x2">
+                        <el-radio label="default" class="radio-card">
+                            <font-awesome-icon icon="cog" class="radio-icon"/>
+                            <span>{{ $t('uploadSettings.namingDefault') }}</span>
+                        </el-radio>
+                        <el-radio label="index" class="radio-card">
+                            <font-awesome-icon icon="hashtag" class="radio-icon"/>
+                            <span>{{ $t('uploadSettings.namingIndex') }}</span>
+                        </el-radio>
+                        <el-radio label="origin" class="radio-card">
+                            <font-awesome-icon icon="file-signature" class="radio-icon"/>
+                            <span>{{ $t('uploadSettings.namingOrigin') }}</span>
+                        </el-radio>
+                        <el-radio label="short" class="radio-card">
+                            <font-awesome-icon icon="compress-alt" class="radio-icon"/>
+                            <span>{{ $t('uploadSettings.namingShort') }}</span>
+                        </el-radio>
+                    </el-radio-group>
+                </div>
+            </section>
+
+            <section class="preference-panel workflow-panel" data-step="04">
+                <div class="section-header">
+                    <span class="section-title">{{ $t('settings.linkFormatTitle') }}</span>
+                </div>
+                <div class="section-content">
+                    <el-radio-group v-model="selectedUrlForm" class="radio-card-group grid-2x2">
+                        <el-radio label="url" class="radio-card">
+                            <font-awesome-icon icon="link" class="radio-icon"/>
+                            <span>{{ $t('settings.rawLink') }}</span>
+                        </el-radio>
+                        <el-radio label="md" class="radio-card">
+                            <font-awesome-icon icon="code" class="radio-icon"/>
+                            <span>Markdown</span>
+                        </el-radio>
+                        <el-radio label="html" class="radio-card">
+                            <font-awesome-icon icon="code-branch" class="radio-icon"/>
+                            <span>HTML</span>
+                        </el-radio>
+                        <el-radio label="ubb" class="radio-card">
+                            <font-awesome-icon icon="quote-right" class="radio-icon"/>
+                            <span>BBCode</span>
+                        </el-radio>
+                    </el-radio-group>
+                    <div class="setting-item link-custom-switch">
+                        <span class="setting-label">{{ $t('settings.enableCustom') }}</span>
+                        <el-switch v-model="useCustomUrl" active-value="true" inactive-value="false" />
+                    </div>
+                    <div class="setting-item" v-if="useCustomUrl === 'true'">
+                        <span class="setting-label">{{ $t('settings.customPrefix') }}</span>
+                        <el-input v-model="customUrlPrefix" :placeholder="$t('settings.customPrefixPlaceholder')" class="setting-input"/>
+                    </div>
+                </div>
+            </section>
+
         </div>
     </div>
 </template>
@@ -394,7 +395,7 @@ export default {
 
 <style scoped>
 .upload-preferences {
-    padding: 20px;
+    padding: 18px 0 28px;
     min-height: 500px;
 }
 
@@ -407,32 +408,50 @@ export default {
     align-items: center;
     gap: 8px;
     margin: 0;
-    padding-bottom: 12px;
-    border-bottom: 2px solid var(--el-color-primary-light-7);
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--flat-border);
+    font-size: 20px;
+    font-weight: 600;
 }
 
 .settings-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 16px;
+    gap: 14px;
 }
 
 .preference-panel {
-    background: var(--glass-bg);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid var(--glass-border);
-    border-radius: 12px;
-    padding: 18px;
+    position: relative;
+    background: var(--flat-surface);
+    border: 1px solid var(--flat-border);
+    border-radius: 8px;
+    padding: 16px;
+    overflow: hidden;
 }
 
 .panel-wide {
     grid-column: 1 / -1;
 }
 
+.workflow-panel::before {
+    content: attr(data-step);
+    position: absolute;
+    top: 14px;
+    right: 16px;
+    color: var(--flat-text-muted);
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.target-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+}
+
 .section-content {
     display: grid;
-    gap: 16px;
+    gap: 12px;
 }
 
 .preprocess-grid {
@@ -442,6 +461,20 @@ export default {
 
 .setting-item {
     min-width: 0;
+    border-color: var(--flat-border);
+    background: var(--flat-surface-soft);
+    border-radius: 8px;
+    align-items: center;
+}
+
+.setting-item-stack {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.setting-item-full {
+    grid-column: 1 / -1;
 }
 
 .setting-input {
@@ -455,14 +488,19 @@ export default {
 
 @media (max-width: 900px) {
     .settings-grid,
+    .target-grid,
     .preprocess-grid {
         grid-template-columns: 1fr;
+    }
+
+    .setting-item-full {
+        grid-column: auto;
     }
 }
 
 @media (max-width: 768px) {
     .upload-preferences {
-        padding: 14px 10px;
+        padding: 12px;
     }
 
     .preference-panel {

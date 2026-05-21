@@ -1,15 +1,18 @@
 <template>
 <div class="sidebar-container" ref="sidebar" :class="{ 'is-collapsed': isCollapse }" :style="sidebarStyle">
     <div class="menu-list">
-        <div 
-            v-for="item in menuItems" 
-            :key="item.index"
-            class="menu-item"
-            :class="{ 'is-active': activeIndex === item.index }"
-            @click="handleSelect(item.index)"
-        >
-            <font-awesome-icon :icon="item.icon" class="menu-icon" />
-            <span class="menu-text">{{ $t(item.titleKey) }}</span>
+        <div v-for="group in menuGroups" :key="group.titleKey" class="menu-section">
+            <div class="menu-section-label">{{ $t(group.titleKey) }}</div>
+            <div
+                v-for="item in group.items"
+                :key="item.index"
+                class="menu-item"
+                :class="{ 'is-active': activeIndex === item.index }"
+                @click="handleSelect(item.index)"
+            >
+                <font-awesome-icon :icon="item.icon" class="menu-icon" />
+                <span class="menu-text">{{ $t(item.titleKey) }}</span>
+            </div>
         </div>
     </div>
 
@@ -35,26 +38,52 @@ props: {
 data() {
     return {
         expandedWidth: null,
-        menuItems: [
-            { index: 'status', icon: 'chart-bar', titleKey: 'sysConfigTabs.systemStatus' },
-            { index: 'upload', icon: 'cloud-upload', titleKey: 'sysConfigTabs.channelManagement' },
-            { index: 'uploadSettings', icon: 'sliders-h', titleKey: 'sysConfigTabs.uploadSettings' },
-            { index: 'security', icon: 'shield', titleKey: 'sysConfigTabs.securitySettings' },
-            { index: 'page', icon: 'pager', titleKey: 'sysConfigTabs.pageSettings' },
-            { index: 'others', icon: 'cog', titleKey: 'sysConfigTabs.otherSettings' }
+        menuGroups: [
+            {
+                titleKey: 'sysConfigTabs.groupRuntime',
+                items: [
+                    { index: 'status', icon: 'chart-bar', titleKey: 'sysConfigTabs.systemStatus' }
+                ]
+            },
+            {
+                titleKey: 'sysConfigTabs.groupUpload',
+                items: [
+                    { index: 'upload', icon: 'cloud-upload-alt', titleKey: 'sysConfigTabs.channelManagement' },
+                    { index: 'uploadSettings', icon: 'sliders-h', titleKey: 'sysConfigTabs.uploadSettings' }
+                ]
+            },
+            {
+                titleKey: 'sysConfigTabs.groupAccess',
+                items: [
+                    { index: 'security', icon: 'shield-alt', titleKey: 'sysConfigTabs.securitySettings' },
+                    { index: 'page', icon: 'pager', titleKey: 'sysConfigTabs.pageSettings' }
+                ]
+            },
+            {
+                titleKey: 'sysConfigTabs.groupMore',
+                items: [
+                    { index: 'others', icon: 'puzzle-piece', titleKey: 'sysConfigTabs.otherSettings' }
+                ]
+            }
         ]
     };
 },
 computed: {
     collapsedWidth() {
-        return window.innerWidth <= 768 ? 50 : 56;
+	        return window.innerWidth <= 768 ? 52 : 56;
     },
-    sidebarStyle() {
-        if (this.isCollapse) {
-            return { width: this.collapsedWidth + 'px' };
-        }
-        return this.expandedWidth ? { width: this.expandedWidth + 'px' } : {};
-    }
+	    sidebarStyle() {
+	        if (this.isCollapse) {
+	            return {
+	                width: `var(--sys-sidebar-collapsed-width, ${this.collapsedWidth}px)`,
+	                maxWidth: `var(--sys-sidebar-collapsed-width, ${this.collapsedWidth}px)`
+	            };
+	        }
+	        return {
+	            width: 'var(--sys-sidebar-width, 208px)',
+	            maxWidth: 'var(--sys-sidebar-width, 208px)'
+	        };
+	    }
 },
 watch: {
     '$i18n.locale'() {
@@ -113,55 +142,68 @@ beforeDestroy() {
     display: flex;
     flex-direction: column;
     position: fixed;
-    top: 50%;
-    left: 8px;
-    transform: translateY(-50%);
-    z-index: 2001;
-    max-width: 200px;
-    /* macOS 风格毛玻璃效果 */
-    background: rgba(255, 255, 255, 0.72);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: 16px;
-    box-shadow: 
-        0 4px 30px rgba(0, 0, 0, 0.1),
-        0 1px 3px rgba(0, 0, 0, 0.05),
-        inset 0 1px 0 rgba(255, 255, 255, 0.4);
-    transition: width 0.3s ease, box-shadow 0.3s ease;
+	    top: 100px;
+	    bottom: 24px;
+	    left: var(--sys-sidebar-left, 10vw);
+	    z-index: 2001;
+	    width: var(--sys-sidebar-width, 208px);
+	    max-width: var(--sys-sidebar-width, 208px);
+    background: var(--flat-surface);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border: 1px solid var(--flat-border);
+    border-radius: 12px;
+    box-shadow: none;
+	    transition: width 0.3s ease, max-width 0.3s ease, border-color 0.2s ease;
     overflow: hidden;
 }
 
-.sidebar-container.is-collapsed {
-    width: 56px;
+@media (max-width: 768px) {
+    .sidebar-container {
+      left: var(--sys-sidebar-left, 8px);
+    }
 }
+	.sidebar-container.is-collapsed {
+	    width: var(--sys-sidebar-collapsed-width, 56px);
+	    max-width: var(--sys-sidebar-collapsed-width, 56px);
+	}
 
 /* 深色模式 */
 html.dark .sidebar-container {
-    background: rgba(30, 30, 30, 0.75);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: 
-        0 4px 30px rgba(0, 0, 0, 0.3),
-        0 1px 3px rgba(0, 0, 0, 0.2),
-        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    background: var(--flat-surface);
+    border: 1px solid var(--flat-border);
+    box-shadow: none;
 }
 
 .sidebar-container:hover {
-    box-shadow: 
-        0 8px 40px rgba(0, 0, 0, 0.12),
-        0 2px 6px rgba(0, 0, 0, 0.08),
-        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    border-color: var(--flat-border-strong);
+    box-shadow: none;
 }
 
 html.dark .sidebar-container:hover {
-    box-shadow: 
-        0 8px 40px rgba(0, 0, 0, 0.4),
-        0 2px 6px rgba(0, 0, 0, 0.3),
-        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    box-shadow: none;
 }
 
 .menu-list {
-    padding: 8px;
+    flex: 1;
+	    padding: 12px 8px;
+    overflow-y: auto;
+}
+
+	.menu-section + .menu-section {
+	    margin-top: 12px;
+	    padding-top: 12px;
+    border-top: 1px solid var(--flat-border);
+}
+
+	.menu-section-label {
+	    padding: 0 12px 8px;
+    color: var(--flat-text-muted);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0;
+    text-align: left;
+    white-space: nowrap;
 }
 
 .menu-item {
@@ -169,7 +211,8 @@ html.dark .sidebar-container:hover {
     align-items: center;
     justify-content: flex-start;
     padding: 12px 12px 12px 0;
-    height: 42px;
+    margin: 4px 0;
+	    height: 44px;
     box-sizing: border-box;
     border-radius: 10px;
     cursor: pointer;
@@ -179,21 +222,36 @@ html.dark .sidebar-container:hover {
     overflow: hidden;
 }
 
+.sidebar-container.is-collapsed .menu-section {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: 0;
+}
+
+.sidebar-container.is-collapsed .menu-section + .menu-section {
+    margin-top: 4px;
+}
+
+.sidebar-container.is-collapsed .menu-section-label {
+    display: none;
+}
+
 .menu-item:hover {
-    background: rgba(0, 0, 0, 0.06);
+    background: var(--flat-surface-soft);
 }
 
 html.dark .menu-item:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: var(--flat-surface-soft);
 }
 
 .menu-item.is-active {
-    background: linear-gradient(135deg, rgba(64, 158, 255, 0.15), rgba(56, 189, 248, 0.25));
-    color: #409EFF;
+    background: var(--flat-primary-soft);
+    color: var(--flat-primary);
+    border: 1px solid rgba(37, 99, 235, 0.18);
 }
 
 html.dark .menu-item.is-active {
-    background: linear-gradient(135deg, rgba(64, 158, 255, 0.2), rgba(56, 189, 248, 0.35));
+    background: var(--flat-primary-soft);
 }
 
 .menu-icon {
@@ -223,33 +281,37 @@ html.dark .menu-item.is-active {
     padding: 12px;
     text-align: center;
     cursor: pointer;
-    border-top: 1px solid rgba(0, 0, 0, 0.08);
+    border-top: 1px solid var(--flat-border);
     transition: all 0.2s ease;
     color: var(--admin-container-color, #333);
 }
 
 html.dark .toggle-button {
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    border-top: 1px solid var(--flat-border);
 }
 
 .toggle-button:hover {
-    background: rgba(0, 0, 0, 0.04);
+    background: var(--flat-surface-soft);
 }
 
 html.dark .toggle-button:hover {
-    background: rgba(255, 255, 255, 0.06);
+    background: var(--flat-surface-soft);
 }
 
 /* 移动端 */
 @media (max-width: 768px) {
-    .sidebar-container {
-        left: 4px;
-        max-width: 170px;
-    }
-    
-    .sidebar-container.is-collapsed {
-        width: 50px;
-    }
+	    .sidebar-container {
+	        top: 88px;
+	        bottom: 12px;
+	        left: var(--sys-sidebar-left, 8px);
+	        width: var(--sys-sidebar-width, 172px);
+	        max-width: var(--sys-sidebar-width, 172px);
+	    }
+
+	    .sidebar-container.is-collapsed {
+	        width: var(--sys-sidebar-collapsed-width, 52px);
+	        max-width: var(--sys-sidebar-collapsed-width, 52px);
+	    }
     
     .menu-icon {
         width: 34px;

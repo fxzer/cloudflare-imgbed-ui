@@ -1,111 +1,134 @@
 <template>
     <div class="others-settings" v-loading="loading">
+        <div class="page-header">
+            <h3 class="first-title">{{ $t('sysConfigTabs.otherSettings') }}</h3>
+        </div>
+
         <!-- 一级设置：其他设置 -->
-        <div class="first-settings">
-            <h3 class="first-title">{{ $t('sysOthers.remoteTelemetry') }}
-                <el-tooltip :content="$t('sysOthers.remoteTelemetryTooltip')" placement="right">
-                    <font-awesome-icon icon="question-circle" style="margin-left: 5px; cursor: pointer;"/>
-                </el-tooltip>
-            </h3>
-            <el-form :model="settings.telemetry" label-width="120px">
-                <el-form-item :label="$t('sysOthers.enable')">
-                    <el-switch v-model="settings.telemetry.enabled" :disabled="settings.telemetry.fixed"></el-switch>
-                </el-form-item>
-            </el-form>
-            <h3 class="first-title">{{ $t('sysOthers.cloudflareApiToken') }}
-                <el-tooltip :content="$t('sysOthers.cloudflareApiTokenTooltip')" placement="right" raw-content>
-                    <font-awesome-icon icon="question-circle" style="margin-left: 5px; cursor: pointer;"/>
-                </el-tooltip>
-            </h3>
-            <el-form :model="settings.cloudflareApiToken" label-width="120px">
-                <el-form-item :label="$t('sysOthers.zoneId')">
-                    <el-input v-model="settings.cloudflareApiToken.CF_ZONE_ID" :disabled="settings.cloudflareApiToken.fixed"></el-input>
-                </el-form-item>
-                <el-form-item :label="$t('sysOthers.accountEmail')">
-                    <el-input v-model="settings.cloudflareApiToken.CF_EMAIL" :disabled="settings.cloudflareApiToken.fixed"></el-input>
-                </el-form-item>
-                <el-form-item label="API Key">
-                    <el-input v-model="settings.cloudflareApiToken.CF_API_KEY" :disabled="settings.cloudflareApiToken.fixed" type="password" show-password autocomplete="new-password"></el-input>
-                </el-form-item>
-            </el-form>
-            <h3 class="first-title">{{ $t('sysOthers.randomImageApi') }}
-                <el-tooltip :content="$t('sysOthers.randomImageApiTooltip')" placement="right">
-                    <font-awesome-icon icon="question-circle" style="margin-left: 5px; cursor: pointer;"/>
-                </el-tooltip>
-            </h3>
-            <el-form :model="settings.randomImageAPI" label-width="120px">
-                <el-form-item :label="$t('sysOthers.enable')">
-                    <el-switch v-model="settings.randomImageAPI.enabled" :disabled="settings.randomImageAPI.fixed"></el-switch>
-                </el-form-item>
-                <el-form-item prop="randomImageAPI.allowedDir">
-                    <template #label>
-                        <span>{{ $t('sysOthers.directory') }}</span>
-                        <el-tooltip :content="$t('sysOthers.directoryTooltip')" placement="right" raw-content>
-                            <font-awesome-icon icon="question-circle" style="margin-left: 5px; cursor: pointer;"/>
-                        </el-tooltip>
-                    </template>
-                    <el-input v-model="settings.randomImageAPI.allowedDir" :disabled="settings.randomImageAPI.fixed"></el-input>
-                </el-form-item>
-            </el-form>
-            <h3 class="first-title">{{ $t('sysOthers.publicBrowse') }}
-                <el-tooltip :content="$t('sysOthers.publicBrowseTooltip')" placement="right" raw-content>
-                    <font-awesome-icon icon="question-circle" style="margin-left: 5px; cursor: pointer;"/>
-                </el-tooltip>
-            </h3>
-            <el-form :model="settings.publicBrowse" label-width="120px">
-                <el-form-item :label="$t('sysOthers.enable')">
-                    <el-switch v-model="settings.publicBrowse.enabled" :disabled="settings.publicBrowse.fixed"></el-switch>
-                </el-form-item>
-                <el-form-item prop="publicBrowse.allowedDir">
-                    <template #label>
-                        <span>{{ $t('sysOthers.openDirectory') }}</span>
-                        <el-tooltip placement="right" raw-content>
-                            <template #content>
-                                <div style="max-width: 320px; line-height: 1.6;" v-html="$t('sysOthers.openDirectoryTooltip')">
-                                </div>
-                            </template>
-                            <font-awesome-icon icon="question-circle" style="margin-left: 5px; cursor: pointer;"/>
-                        </el-tooltip>
-                    </template>
-                    <el-input v-model="settings.publicBrowse.allowedDir" :disabled="settings.publicBrowse.fixed" placeholder="wallpaper,photos,album"></el-input>
-                </el-form-item>
-            </el-form>
-            <h3 class="first-title">{{ $t('sysOthers.webdav') }}
-                <el-tooltip :content="$t('sysOthers.webdavTooltip')" placement="right" raw-content>
-                    <font-awesome-icon icon="question-circle" style="margin-left: 5px; cursor: pointer;"/>
-                </el-tooltip>
-            </h3>
-            <el-form :model="settings.webDAV" label-width="120px">
-                <el-form-item :label="$t('sysOthers.enable')">
-                    <el-switch v-model="settings.webDAV.enabled" :disabled="settings.webDAV.fixed"></el-switch>
-                </el-form-item>
-                <el-form-item :label="$t('sysOthers.webdavUsername')">
-                    <el-input v-model="settings.webDAV.username" :disabled="settings.webDAV.fixed"></el-input>
-                </el-form-item>
-                <el-form-item :label="$t('sysOthers.webdavPassword')">
-                    <el-input v-model="settings.webDAV.password" :disabled="settings.webDAV.fixed" type="password" show-password autocomplete="new-password"></el-input>
-                </el-form-item>
-                <el-form-item :label="$t('sysOthers.webdavUploadChannel')">
-                    <el-select v-model="settings.webDAV.uploadChannel" :disabled="settings.webDAV.fixed" :placeholder="$t('sysOthers.webdavDefaultChannel')" clearable>
-                        <el-option label="Telegram" value="telegram"></el-option>
-                        <el-option label="Cloudflare R2" value="cfr2"></el-option>
-                        <el-option label="S3" value="s3"></el-option>
-                        <el-option label="Discord" value="discord"></el-option>
-                        <el-option label="HuggingFace" value="huggingface"></el-option>
-                        <el-option label="WebDAV" value="webdav"></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item :label="$t('sysOthers.webdavChannelName')" v-if="settings.webDAV.uploadChannel && webdavChannelList.length > 1">
-                    <el-select v-model="settings.webDAV.channelName" :disabled="settings.webDAV.fixed" :placeholder="$t('uploadSettings.autoSelect')" clearable>
-                        <el-option
-                            v-for="ch in webdavChannelList"
-                            :key="ch.name"
-                            :label="ch.name"
-                            :value="ch.name"
-                        ></el-option>
-                    </el-select>
-                </el-form-item>
-            </el-form>
+        <div class="settings-stack">
+            <section class="settings-section">
+                <div class="section-header">
+                    <span class="section-title">{{ $t('sysOthers.remoteTelemetry') }}</span>
+                    <el-tooltip :content="$t('sysOthers.remoteTelemetryTooltip')" placement="right">
+                        <font-awesome-icon icon="question-circle" class="section-help-icon"/>
+                    </el-tooltip>
+                </div>
+                <el-form :model="settings.telemetry" label-width="120px">
+                    <el-form-item :label="$t('sysOthers.enable')">
+                        <el-switch v-model="settings.telemetry.enabled" :disabled="settings.telemetry.fixed"></el-switch>
+                    </el-form-item>
+                </el-form>
+            </section>
+
+            <section class="settings-section">
+                <div class="section-header">
+                    <span class="section-title">{{ $t('sysOthers.cloudflareApiToken') }}</span>
+                    <el-tooltip :content="$t('sysOthers.cloudflareApiTokenTooltip')" placement="right" raw-content>
+                        <font-awesome-icon icon="question-circle" class="section-help-icon"/>
+                    </el-tooltip>
+                </div>
+                <el-form :model="settings.cloudflareApiToken" label-width="120px">
+                    <el-form-item :label="$t('sysOthers.zoneId')">
+                        <el-input v-model="settings.cloudflareApiToken.CF_ZONE_ID" :disabled="settings.cloudflareApiToken.fixed"></el-input>
+                    </el-form-item>
+                    <el-form-item :label="$t('sysOthers.accountEmail')">
+                        <el-input v-model="settings.cloudflareApiToken.CF_EMAIL" :disabled="settings.cloudflareApiToken.fixed"></el-input>
+                    </el-form-item>
+                    <el-form-item label="API Key">
+                        <el-input v-model="settings.cloudflareApiToken.CF_API_KEY" :disabled="settings.cloudflareApiToken.fixed" type="password" show-password autocomplete="new-password"></el-input>
+                    </el-form-item>
+                </el-form>
+            </section>
+
+            <section class="settings-section">
+                <div class="section-header">
+                    <span class="section-title">{{ $t('sysOthers.randomImageApi') }}</span>
+                    <el-tooltip :content="$t('sysOthers.randomImageApiTooltip')" placement="right">
+                        <font-awesome-icon icon="question-circle" class="section-help-icon"/>
+                    </el-tooltip>
+                </div>
+                <el-form :model="settings.randomImageAPI" label-width="120px">
+                    <el-form-item :label="$t('sysOthers.enable')">
+                        <el-switch v-model="settings.randomImageAPI.enabled" :disabled="settings.randomImageAPI.fixed"></el-switch>
+                    </el-form-item>
+                    <el-form-item prop="randomImageAPI.allowedDir">
+                        <template #label>
+                            <span>{{ $t('sysOthers.directory') }}</span>
+                            <el-tooltip :content="$t('sysOthers.directoryTooltip')" placement="right" raw-content>
+                                <font-awesome-icon icon="question-circle" class="section-help-icon"/>
+                            </el-tooltip>
+                        </template>
+                        <el-input v-model="settings.randomImageAPI.allowedDir" :disabled="settings.randomImageAPI.fixed"></el-input>
+                    </el-form-item>
+                </el-form>
+            </section>
+
+            <section class="settings-section">
+                <div class="section-header">
+                    <span class="section-title">{{ $t('sysOthers.publicBrowse') }}</span>
+                    <el-tooltip :content="$t('sysOthers.publicBrowseTooltip')" placement="right" raw-content>
+                        <font-awesome-icon icon="question-circle" class="section-help-icon"/>
+                    </el-tooltip>
+                </div>
+                <el-form :model="settings.publicBrowse" label-width="120px">
+                    <el-form-item :label="$t('sysOthers.enable')">
+                        <el-switch v-model="settings.publicBrowse.enabled" :disabled="settings.publicBrowse.fixed"></el-switch>
+                    </el-form-item>
+                    <el-form-item prop="publicBrowse.allowedDir">
+                        <template #label>
+                            <span>{{ $t('sysOthers.openDirectory') }}</span>
+                            <el-tooltip placement="right" raw-content>
+                                <template #content>
+                                    <div style="max-width: 320px; line-height: 1.6;" v-html="$t('sysOthers.openDirectoryTooltip')">
+                                    </div>
+                                </template>
+                                <font-awesome-icon icon="question-circle" class="section-help-icon"/>
+                            </el-tooltip>
+                        </template>
+                        <el-input v-model="settings.publicBrowse.allowedDir" :disabled="settings.publicBrowse.fixed" placeholder="wallpaper,photos,album"></el-input>
+                    </el-form-item>
+                </el-form>
+            </section>
+
+            <section class="settings-section section-wide">
+                <div class="section-header">
+                    <span class="section-title">{{ $t('sysOthers.webdav') }}</span>
+                    <el-tooltip :content="$t('sysOthers.webdavTooltip')" placement="right" raw-content>
+                        <font-awesome-icon icon="question-circle" class="section-help-icon"/>
+                    </el-tooltip>
+                </div>
+                <el-form :model="settings.webDAV" label-width="120px">
+                    <el-form-item :label="$t('sysOthers.enable')">
+                        <el-switch v-model="settings.webDAV.enabled" :disabled="settings.webDAV.fixed"></el-switch>
+                    </el-form-item>
+                    <el-form-item :label="$t('sysOthers.webdavUsername')">
+                        <el-input v-model="settings.webDAV.username" :disabled="settings.webDAV.fixed"></el-input>
+                    </el-form-item>
+                    <el-form-item :label="$t('sysOthers.webdavPassword')">
+                        <el-input v-model="settings.webDAV.password" :disabled="settings.webDAV.fixed" type="password" show-password autocomplete="new-password"></el-input>
+                    </el-form-item>
+                    <el-form-item :label="$t('sysOthers.webdavUploadChannel')">
+                        <el-select v-model="settings.webDAV.uploadChannel" :disabled="settings.webDAV.fixed" :placeholder="$t('sysOthers.webdavDefaultChannel')" clearable>
+                            <el-option label="Telegram" value="telegram"></el-option>
+                            <el-option label="Cloudflare R2" value="cfr2"></el-option>
+                            <el-option label="S3" value="s3"></el-option>
+                            <el-option label="Discord" value="discord"></el-option>
+                            <el-option label="HuggingFace" value="huggingface"></el-option>
+                            <el-option label="WebDAV" value="webdav"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item :label="$t('sysOthers.webdavChannelName')" v-if="settings.webDAV.uploadChannel && webdavChannelList.length > 1">
+                        <el-select v-model="settings.webDAV.channelName" :disabled="settings.webDAV.fixed" :placeholder="$t('uploadSettings.autoSelect')" clearable>
+                            <el-option
+                                v-for="ch in webdavChannelList"
+                                :key="ch.name"
+                                :label="ch.name"
+                                :value="ch.name"
+                            ></el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-form>
+            </section>
         </div>
 
     
@@ -192,69 +215,91 @@ mounted() {
 
 <style scoped>
 .others-settings {
-    padding: 20px;
+    padding: 18px 0 28px;
     min-height: 500px;
 }
 
-.first-settings {
-    margin-bottom: 40px;
+.page-header {
+    margin-bottom: 14px;
 }
 
 .first-title {
     display: flex;
     align-items: center;
     gap: 8px;
-    margin-bottom: 20px;
-    padding-bottom: 12px;
-    border-bottom: 2px solid var(--el-color-primary-light-7);
+    margin: 0;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--flat-border);
+    font-size: 20px;
+    font-weight: 600;
 }
 
-.second-title {
+.settings-stack {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.settings-section {
+    background: var(--flat-surface);
+    border: 1px solid var(--flat-border);
+    border-radius: 8px;
+    padding: 16px;
+}
+
+.settings-section:hover {
+    border-color: var(--flat-border-strong);
+}
+
+.section-wide {
+    grid-column: 1 / -1;
+}
+
+.settings-section .section-header {
     display: flex;
     align-items: center;
-    gap: 8px;
-    text-align: start;
-    margin-left: 0;
-    margin-bottom: 16px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid var(--el-border-color-lighter);
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--flat-border);
 }
 
-/* 表单样式 - 一行 4 列网格布局，节省纵向空间 */
-.first-settings :deep(.el-form) {
-    padding: 16px 20px;
-    background: var(--glass-bg);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-radius: 12px;
-    border: 1px solid var(--glass-border);
-    margin-bottom: 20px;
-    box-shadow: var(--glass-shadow);
-    transition: all 0.3s ease;
+.section-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--flat-text);
+}
+
+.section-help-icon {
+    color: var(--flat-text-muted);
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.settings-section :deep(.el-form) {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    column-gap: 24px;
-    row-gap: 4px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
 }
 
-.first-settings :deep(.el-form:hover) {
-    box-shadow: var(--glass-shadow-hover);
-    background: var(--glass-bg-hover);
-}
-
-.first-settings :deep(.el-form-item) {
-    margin-bottom: 12px;
+.settings-section :deep(.el-form-item) {
+    margin-bottom: 0;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     min-width: 0;
+    padding: 12px 14px;
+    background: var(--flat-surface-soft);
+    border: 1px solid var(--flat-border);
+    border-radius: 8px;
 }
 
-.first-settings :deep(.el-form-item:last-child) {
-    margin-bottom: 0;
+.settings-section :deep(.el-form-item:only-child) {
+    grid-column: 1 / -1;
 }
 
-.first-settings :deep(.el-form-item__label) {
+.settings-section :deep(.el-form-item__label) {
     text-align: left;
     padding-bottom: 6px;
     font-weight: 500;
@@ -265,45 +310,36 @@ mounted() {
     gap: 5px;
 }
 
-.first-settings :deep(.el-form-item__content) {
+.settings-section :deep(.el-form-item__content) {
     width: 100%;
     max-width: 100%;
     margin-left: 0 !important;
 }
 
-.first-settings :deep(.el-input) {
+.settings-section :deep(.el-input) {
     width: 100%;
 }
 
-.first-settings :deep(.el-select) {
+.settings-section :deep(.el-select) {
     width: 100%;
 }
 
-.first-settings :deep(.el-switch) {
+.settings-section :deep(.el-switch) {
     --el-switch-on-color: var(--el-color-primary);
 }
 
-/* 中等屏幕降为 2 列 */
 @media (max-width: 1200px) {
-    .first-settings :deep(.el-form) {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+    .settings-stack,
+    .settings-section :deep(.el-form) {
+        grid-template-columns: 1fr;
     }
 }
 
 /* 移动端适配 */
 @media (max-width: 768px) {
     .others-settings {
-        padding: 15px;
-        padding-bottom: 80px; /* 为悬浮按钮留出空间 */
-    }
-
-    .first-settings :deep(.el-form) {
-        padding: 12px 15px;
-        grid-template-columns: 1fr;
-    }
-
-    .first-settings :deep(.el-form-item__content) {
-        max-width: 100%;
+        padding: 12px;
+        padding-bottom: 80px;
     }
 }
 </style>

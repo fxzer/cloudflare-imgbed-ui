@@ -1186,3 +1186,343 @@ html.dark .admin-dashboard-btn {
 .el-segmented__item{
   background-color: var(--el-segmented-bg-color);
 }
+
+/* === 全站扁平化整理：少阴影、少玻璃、用清楚边框和色块区分层级 === */
+:root {
+    --flat-page-bg: #f6f8fb;
+    --flat-page-bg-admin: #f5f7fb;
+    --flat-surface: #ffffff;
+    --flat-surface-soft: #f9fafb;
+    --flat-surface-muted: #f1f5f9;
+    --flat-border: rgba(15, 23, 42, 0.12);
+    --flat-border-strong: rgba(15, 23, 42, 0.18);
+    --flat-text: #172033;
+    --flat-text-muted: #64748b;
+    --flat-primary: #2563eb;
+    --flat-primary-soft: rgba(37, 99, 235, 0.1);
+
+    --bg-color: var(--flat-page-bg);
+    --admin-container-bg-color: var(--flat-page-bg-admin);
+    --admin-container-color: var(--flat-text);
+    --popper-bg-color: var(--flat-surface);
+    --popper-shadow: none;
+    --dialog-bg-color: var(--flat-surface);
+    --dialog-box-shadow: none;
+    --glass-bg: var(--flat-surface);
+    --glass-bg-hover: var(--flat-surface);
+    --glass-border: var(--flat-border);
+    --glass-border-hover: var(--flat-border-strong);
+    --glass-shadow: none;
+    --glass-shadow-hover: none;
+    --glass-header-bg: var(--flat-surface-soft);
+    --glass-header-border: var(--flat-border);
+
+    --toolbar-button-bg-color: var(--flat-surface);
+    --toolbar-button-color: var(--flat-primary);
+    --upload-list-card-bg-color: var(--flat-surface);
+    --upload-list-card-border: 1px solid var(--flat-border);
+    --upload-list-card-box-shadow: none;
+    --upload-list-dashboard-bg-color: var(--flat-surface);
+    --upload-list-dashboard-shadow: none;
+    --el-upload-dragger-bg-color: var(--flat-surface);
+    --el-upload-dragger-border: 1px dashed rgba(37, 99, 235, 0.45);
+    --el-upload-dragger-border-color: rgba(37, 99, 235, 0.45);
+    --el-upload-dragger-hover-box-shadow: none;
+    --paste-card-textarea-border-color: rgba(37, 99, 235, 0.35);
+    --paste-card-textarea-box-shadow: none;
+
+    --admin-header-content-bg-color: var(--flat-surface);
+    --admin-header-content-hover-bg-color: var(--flat-surface);
+    --admin-header-content-border-bottom: 1px solid var(--flat-border);
+    --admin-header-content-box-shadow: none;
+    --admin-header-content-hover-box-shadow: none;
+    --admin-dashborad-stats-bg-color: var(--flat-surface);
+    --admin-dashborad-stats-hover-bg-color: var(--flat-surface-soft);
+    --admin-dashboard-search-card-bg-color: var(--flat-surface);
+    --admin-dashboard-search-card-box-shadow: none;
+    --admin-dashboard-stats-shadow: none;
+    --admin-dashboard-stats-hover-shadow: none;
+    --admin-dashboard-btn-bg-color: var(--flat-surface);
+    --admin-dashboard-imgcard-bg-color: var(--flat-surface);
+    --admin-dashboard-imgcard-shadow: none;
+    --admin-dashboard-tag-suggestion-bg-color: var(--flat-surface);
+    --admin-dashboard-tag-suggestion-border-color: var(--flat-border);
+    --admin-dashboard-tag-suggestion-box-shadow: none;
+    --admin-cuscfg-table-shadow: none;
+    --admin-cuscfg-table-bg-color: var(--flat-surface);
+
+    --login-container-bg-color: var(--flat-surface);
+    --password-input-bg-color: var(--flat-surface);
+    --login-container-box-shadow: none;
+    --login-container-hover-box-shadow: none;
+    --login-submit-btn-bg-color: var(--flat-primary);
+    --floating-btn-bg: var(--flat-primary);
+}
+
+html.dark {
+    --flat-page-bg: #000000;
+    --flat-page-bg-admin: #000000;
+    --flat-surface: #0f1115;
+    --flat-surface-soft: #151922;
+    --flat-surface-muted: #1d2330;
+    --flat-border: rgba(255, 255, 255, 0.14);
+    --flat-border-strong: rgba(255, 255, 255, 0.22);
+    --flat-text: #f4f7fb;
+    --flat-text-muted: #a7b0bf;
+    --flat-primary: #60a5fa;
+    --flat-primary-soft: rgba(96, 165, 250, 0.14);
+}
+
+body {
+    background: var(--flat-page-bg);
+    color: var(--flat-text);
+}
+
+.container,
+.login,
+.not-found-container,
+.blocked-container,
+.whitelist-container {
+    background: var(--flat-page-bg);
+    color: var(--flat-text);
+}
+
+.header-content {
+    background: var(--flat-surface) !important;
+    border: 1px solid var(--flat-border) !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+.header-content:hover {
+    background: var(--flat-surface) !important;
+    box-shadow: none !important;
+}
+
+.el-dialog,
+.settings-dialog,
+.channel-dialog {
+    background: var(--flat-surface) !important;
+    border: 1px solid var(--flat-border) !important;
+    box-shadow: none !important;
+    border-radius: 12px !important;
+}
+
+.el-dialog,
+.el-popper,
+.el-message,
+.el-dropdown-menu {
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+.el-message {
+    border-radius: 10px !important;
+    border: 1px solid var(--flat-border) !important;
+    background: var(--flat-surface) !important;
+}
+
+.el-message .el-message__content {
+    color: var(--flat-text) !important;
+}
+
+html.dark .el-message {
+    background: var(--flat-surface) !important;
+}
+
+.dialog-section,
+.setting-item,
+.main-table,
+.token-table,
+.channel-group,
+.channel-card,
+.img-card,
+.file-list-item,
+.folder-card,
+.search-card :is(.el-input__wrapper),
+.el-card {
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border-color: var(--flat-border) !important;
+}
+
+.dialog-section,
+.setting-item,
+.token-table,
+.channel-group,
+.channel-card,
+.main-table {
+    background: var(--flat-surface) !important;
+}
+
+.el-table {
+    --el-table-bg-color: var(--flat-surface);
+    --el-table-tr-bg-color: var(--flat-surface);
+    --el-table-header-bg-color: var(--flat-surface-soft);
+    --el-table-row-hover-bg-color: var(--flat-surface-soft);
+    border: 1px solid var(--flat-border) !important;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.el-table th.el-table__cell {
+    background: var(--flat-surface-soft) !important;
+    color: var(--flat-text) !important;
+}
+
+.el-table td.el-table__cell,
+.el-table th.el-table__cell {
+    border-bottom-color: var(--flat-border) !important;
+}
+
+.el-input__wrapper,
+.el-textarea__inner,
+.el-select__wrapper {
+    box-shadow: none !important;
+    border: 1px solid var(--flat-border) !important;
+    background: var(--flat-surface) !important;
+}
+
+.el-input__wrapper:hover,
+.el-textarea__inner:hover,
+.el-select__wrapper:hover {
+    border-color: var(--flat-border-strong) !important;
+}
+
+.el-input__wrapper.is-focus,
+.el-textarea__inner:focus,
+.el-select__wrapper.is-focused {
+    border-color: var(--flat-primary) !important;
+}
+
+.el-button {
+    background-image: none !important;
+    border-color: var(--flat-border) !important;
+}
+
+.el-button--primary {
+    background: var(--flat-primary) !important;
+    border-color: var(--flat-primary) !important;
+    color: #ffffff !important;
+}
+
+.el-button:not(.el-button--primary):hover,
+.el-button:not(.el-button--primary):focus {
+    background: var(--flat-surface-soft) !important;
+    border-color: var(--flat-border-strong) !important;
+    color: var(--flat-primary) !important;
+}
+
+.radio-card-group .radio-card.is-checked {
+    background: var(--flat-primary-soft) !important;
+    border-color: var(--flat-primary) !important;
+}
+
+.tabs-segmented,
+.upload-method-segmented {
+    background: var(--flat-surface-soft) !important;
+    border-color: var(--flat-border) !important;
+}
+
+.tabs-segmented .el-segmented__item-selected,
+.upload-method-segmented .el-segmented__item-selected {
+    background: var(--flat-primary) !important;
+    color: #ffffff !important;
+}
+
+.overview-card,
+.chart-card,
+.info-card,
+.media-card,
+.token-card,
+.status-card,
+.config-card,
+.upload-list-card,
+.paste-card,
+.upload-card-textarea,
+.folder-card,
+.main-table,
+.token-table,
+.bottom-sheet,
+.directory-drawer {
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border: 1px solid var(--flat-border) !important;
+    background: var(--flat-surface) !important;
+}
+
+.overview-card:hover,
+.chart-card:hover,
+.info-card:hover,
+.media-card:hover,
+.token-card:hover,
+.status-card:hover,
+.config-card:hover,
+.channel-group:hover,
+.channel-card:hover,
+.folder-card:hover,
+.img-card:hover {
+    box-shadow: none !important;
+    transform: none !important;
+    border-color: var(--flat-border-strong) !important;
+}
+
+.card-glow,
+.upload-card-glow,
+.floating-elements,
+.floating-shape {
+    display: none !important;
+}
+
+
+.pagination-container .el-pager li,
+.pagination-container .btn-prev,
+.pagination-container .btn-next,
+.pagination-container .load-more,
+.page-input,
+.stats-badge {
+    box-shadow: none !important;
+    border: 1px solid var(--flat-border) !important;
+    background: var(--flat-surface) !important;
+}
+
+.pagination-container .el-pager li:hover,
+.pagination-container .btn-prev:hover,
+.pagination-container .btn-next:hover,
+.pagination-container .load-more:hover,
+.stats-badge:hover {
+    transform: none !important;
+    box-shadow: none !important;
+    background: var(--flat-surface-soft) !important;
+}
+
+.action-btn,
+.modern-action-btn,
+.file-action-btn,
+.confirm-btn,
+.load-more {
+    box-shadow: none !important;
+}
+
+.action-btn:hover,
+.modern-action-btn:hover,
+.file-action-btn:hover,
+.confirm-btn:hover,
+.load-more:hover {
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+.not-found-content,
+.blocked-content,
+.whitelist-content {
+    background: var(--flat-surface) !important;
+    border: 1px solid var(--flat-border) !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}

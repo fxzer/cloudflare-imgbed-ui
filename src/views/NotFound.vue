@@ -159,11 +159,11 @@ export default {
   max-width: 600px;
   padding: 2rem;
   position: relative;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(20px);
-  border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  background: var(--flat-surface);
+  backdrop-filter: none;
+  border-radius: 12px;
+  border: 1px solid var(--flat-border);
+  box-shadow: none;
 }
 
 /* 返回按钮 */
@@ -176,15 +176,15 @@ export default {
 
 .back-button {
   background: var(--toolbar-button-bg-color, rgba(255, 255, 255, 0.9));
-  border: none;
+  border: 1px solid var(--flat-border);
   color: var(--toolbar-button-text-color, #333);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  box-shadow: none;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .back-button:hover {
-  transform: translateY(-2px) scale(1.1);
-  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.2);
+  transform: none;
+  box-shadow: none;
   background: var(--primary-color, #409eff);
   color: white;
 }

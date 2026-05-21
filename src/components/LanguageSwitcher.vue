@@ -1,10 +1,16 @@
 <template>
-  <span class="language-switcher" @click="toggleLocale" role="button" :title="switchTitle" :aria-label="switchTitle">
-    <span class="lang-current" :class="{ 'is-zh': isZh, 'is-en': !isZh }">
-      <transition name="lang-fade" mode="out-in">
-        <span :key="currentLocaleLabel" class="lang-code">{{ currentLocaleLabel }}</span>
-      </transition>
-    </span>
+  <span
+    class="language-switcher"
+    @click="toggleLocale"
+    role="button"
+    :title="switchTitle"
+    :aria-label="switchTitle"
+  >
+    <transition name="lang-fade" mode="out-in">
+      <span :key="currentLocaleLabel" class="lang-current" :class="{ 'is-zh': isZh, 'is-en': !isZh }">
+        <span class="lang-code">{{ currentLocaleLabel }}</span>
+      </span>
+    </transition>
   </span>
 </template>
 
@@ -19,6 +25,9 @@ export default {
     },
     currentLocaleLabel() {
       return this.isZh ? '中' : 'EN'
+    },
+    currentLocaleIcon() {
+      return this.isZh ? 'language' : 'globe'
     },
     switchTitle() {
       return this.isZh ? '切换到 English' : 'Switch to 中文'
@@ -39,27 +48,44 @@ export default {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  width: var(--lang-control-size, 40px);
+  height: var(--lang-control-size, 40px);
+  border: 1px solid var(--lang-control-border, var(--flat-border, rgba(255, 255, 255, 0.18)));
+  border-radius: var(--lang-control-radius, 12px);
+  background: var(--lang-control-bg, var(--toolbar-button-bg-color, transparent));
+  color: var(--lang-icon-color, var(--theme-toggle-color));
+  box-sizing: border-box;
   user-select: none;
-  transition: all 0.3s ease;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.language-switcher:hover {
+  border-color: var(--flat-border-strong, var(--el-color-primary));
+  background: var(--flat-surface-soft, var(--toolbar-button-bg-color, transparent));
 }
 
 .lang-current {
-  width: calc(var(--lang-icon-size, 1.5em) * 1.45);
-  height: calc(var(--lang-icon-size, 1.5em) * 1.45);
-  min-width: 28px;
-  min-height: 28px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: var(--lang-icon-color, var(--theme-toggle-color));
-  font-weight: 700;
+  gap: 4px;
+  width: 100%;
+  height: 100%;
+  font-weight: 600;
   line-height: 1;
-  font-size:16px
+  font-size: 13px;
 }
 
+.lang-symbol {
+  width: 14px;
+  font-size: var(--lang-icon-size, 14px);
+}
 
 .lang-code {
   display: inline-block;
+  min-width: 14px;
+  font-size: 12px;
+  text-align: center;
 }
 
 .lang-fade-enter-active,
@@ -70,6 +96,6 @@ export default {
 .lang-fade-enter-from,
 .lang-fade-leave-to {
   opacity: 0;
-  transform: translateY(3px) scale(0.9);
+  transform: translateY(4px) scale(0.9);
 }
 </style>

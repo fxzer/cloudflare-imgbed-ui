@@ -491,12 +491,12 @@ export default {
 
 .top-toolbar {
     position: fixed;
-    top: 30px;
-    right: 30px;
+    top: 32px;
+    right: 32px;
     z-index: 120;
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 24px;
 }
 
 .top-control-group {
@@ -527,30 +527,19 @@ export default {
 }
 
 .top-language-switcher {
-    --lang-icon-size: 1.18em;
+    --lang-control-size: 40px;
+    --lang-control-radius: 12px;
+    --lang-icon-size: 14px;
     --lang-icon-color: var(--theme-toggle-color);
-    width: 2.5rem;
-    height: 2.5rem;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 12px;
-    background-color: var(--toolbar-button-bg-color);
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    box-shadow: none;
-    backdrop-filter: blur(10px);
-    box-sizing: border-box;
+    --lang-control-bg: var(--toolbar-button-bg-color);
+    --lang-control-border: rgba(255, 255, 255, 0.18);
 }
 
 .top-theme-toggle {
-    width: 2.5rem !important;
-    height: 2.5rem !important;
-    background-color: var(--toolbar-button-bg-color);
-    border: 1px solid rgba(255, 255, 255, 0.18) !important;
-    box-shadow: none;
-    backdrop-filter: blur(10px);
-    border-radius: 12px;
-    box-sizing: border-box;
+    --theme-toggle-size: 40px;
+    --theme-toggle-radius: 12px;
+    --theme-toggle-control-bg: var(--toolbar-button-bg-color);
+    --theme-toggle-border: rgba(255, 255, 255, 0.18);
 }
 
 .top-icon-button.logout-action {
@@ -562,8 +551,6 @@ export default {
 }
 
 .top-language-switcher :deep(.lang-current) {
-    min-width: 0;
-    min-height: 0;
     border: none;
     background: transparent;
 }
@@ -580,7 +567,7 @@ export default {
         left: 12px;
         right: 12px;
         justify-content: flex-end;
-        gap: 14px;
+        gap: 16px;
     }
 
     .top-control-group {
@@ -595,12 +582,13 @@ export default {
     }
 
     .top-language-switcher {
-        --lang-icon-size: 1em;
+        --lang-control-size: 32px;
+        --lang-icon-size: 12px;
     }
 
     .top-theme-toggle {
-        width: 1.85rem !important;
-        height: 1.85rem !important;
+        --theme-toggle-size: 32px;
+        --theme-toggle-mobile-size: 32px;
     }
 }
 
@@ -631,7 +619,7 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    border: none;
+    border: 1px solid rgba(255, 255, 255, 0.18);
     margin-left: 0;
     transition: all 0.3s ease;
     background-color: var(--toolbar-button-bg-color);
@@ -642,7 +630,7 @@ export default {
     outline: none;
 }
 .directory-tree-trigger:hover {
-    transform: scale(1.05);
+    transform: none;
     box-shadow: none;
 }
 @media (max-width: 768px) {
@@ -680,7 +668,7 @@ export default {
 .top-icon-button:hover,
 .top-language-switcher:hover,
 .top-theme-toggle:hover {
-    transform: scale(1.05);
+    transform: none;
     box-shadow: none;
 }
 
@@ -703,7 +691,7 @@ export default {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 15px;
+    padding: 16px;
     margin-top: 5vh;
     color: var(--upload-header-color);
     user-select: none;
@@ -717,12 +705,12 @@ export default {
     --el-segmented-bg-color: rgba(64, 158, 255, 0.08);
     --el-segmented-item-selected-bg-color: var(--el-color-primary);
     --el-segmented-item-selected-color: #fff;
-    margin-top: 6px;
+    margin-top: 8px;
     min-height: 38px;
     padding: 4px;
     border-radius: 12px;
     background: rgba(64, 158, 255, 0.08);
-    /* border: 1px solid rgba(255, 255, 255, 0.18); */
+    border: 1px solid rgba(255, 255, 255, 0.18);
     box-sizing: border-box;
 }
 

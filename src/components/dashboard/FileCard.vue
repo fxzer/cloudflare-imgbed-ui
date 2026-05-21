@@ -233,10 +233,11 @@ export default {
     height: 22vh;
     background: var(--admin-dashboard-imgcard-bg-color);
     border-radius: 8px;
-    box-shadow: var(--admin-dashboard-imgcard-shadow);
+    box-shadow: none;
+    border: 1px solid var(--flat-border);
     overflow: hidden;
     position: relative;
-    transition: transform 0.3s ease;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
 }
 .img-card :deep(.el-card__body) {
     padding: 0;
@@ -251,7 +252,8 @@ export default {
     z-index: 10;
 }
 .img-card:hover {
-    transform: scale(1.05);
+    transform: none;
+    border-color: var(--flat-border-strong);
 }
 .image-preview, .video-preview {
     width: 100%;
@@ -266,7 +268,7 @@ export default {
 .img-card:hover .image-preview,
 .img-card:hover .video-preview,
 .img-card:hover .file-icon {
-    transform: scale(1.08);
+    transform: none;
 }
 .image-preview:hover {
     opacity: 0.8;

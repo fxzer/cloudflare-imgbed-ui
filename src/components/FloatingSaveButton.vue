@@ -66,11 +66,10 @@ export default {
     align-items: center;
     gap: 6px;
     padding: 10px 18px;
-    background: var(--floating-btn-bg);
-    color: var(--floating-btn-color);
+    background: var(--el-color-success);
+    color: var(--el-color-white);
     border-radius: 50px;
     cursor: pointer;
-    box-shadow: var(--floating-btn-shadow);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 100;
     font-weight: 500;

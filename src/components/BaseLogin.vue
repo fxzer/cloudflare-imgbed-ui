@@ -268,8 +268,8 @@ export default {
 
 .login-title:hover,
 .login-title:focus {
-    transform: translateY(-2px);
-    text-shadow: 0 0 10px var(--login-title-glow-color, rgba(52, 152, 219, 0.5));
+    transform: none;
+    text-shadow: none;
 }
 
 .login-container {
@@ -281,9 +281,10 @@ export default {
     height: auto;
     width: 600px;
     border-radius: 12px;
-    box-shadow: var(--login-container-box-shadow);
+    box-shadow: none;
     background-color: var(--login-container-bg-color);
-    backdrop-filter: blur(8px);
+    border: 1px solid var(--flat-border);
+    backdrop-filter: none;
     transition: all 0.3s ease;
     padding: 40px 0;
     gap: 20px;
@@ -298,8 +299,8 @@ export default {
     }
 }
 .login-container:hover {
-    box-shadow: var(--login-container-hover-box-shadow);
-    transform: translateY(-5px);
+    box-shadow: none;
+    transform: none;
 }
 
 .input-container {
@@ -353,7 +354,7 @@ export default {
     bottom: -2px;
     width: 0;
     height: 2px;
-    background: linear-gradient(90deg, var(--login-input-underline-color, #5b9bd3), var(--login-input-underline-secondary-color, #7ba9d8));
+    background: var(--login-input-underline-color, #5b9bd3);
     transition: width 0.3s linear;
     border-radius: 1px;
 }
@@ -383,8 +384,8 @@ export default {
     letter-spacing: 2px;
     border-radius: 12px;
     background-color: var(--login-submit-btn-bg-color);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    border: none;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+    border: 1px solid var(--login-submit-btn-bg-color);
     overflow: hidden;
     position: relative;
     padding: 0;
@@ -425,8 +426,8 @@ export default {
 
 .submit:not(.is-loading):hover,
 .submit:not(.is-loading):focus {
-    transform: translateY(-3px) scale(1.05);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transform: none;
+    box-shadow: none;
 }
 
 .submit:disabled {
@@ -453,40 +454,25 @@ export default {
 .password-input:deep(.el-input__wrapper) {
     border-radius: 12px;
     background-color: var(--password-input-bg-color);
-    border: 2px solid transparent;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--flat-border);
+    box-shadow: none;
     padding: 12px 16px;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    backdrop-filter: blur(10px);
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+    backdrop-filter: none;
     position: relative;
     overflow: hidden;
 }
 
-.password-input:deep(.el-input__wrapper)::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-    transition: left 0.5s;
-}
-
-.password-input:deep(.el-input__wrapper):hover::before {
-    left: 100%;
-}
-
 .password-input:deep(.el-input__wrapper):hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    transform: none;
+    box-shadow: none;
     border-color: var(--login-input-underline-color, #5b9bd3);
 }
 
 .password-input:deep(.el-input__wrapper):focus-within {
     border-color: var(--login-input-underline-color, #5b9bd3);
-    box-shadow: 0 0 0 3px rgba(91, 155, 211, 0.1);
-    transform: translateY(-1px);
+    box-shadow: none;
+    transform: none;
 }
 
 .password-input:deep(.el-input__inner) {
