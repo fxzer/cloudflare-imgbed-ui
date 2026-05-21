@@ -37,7 +37,8 @@ data() {
         expandedWidth: null,
         menuItems: [
             { index: 'status', icon: 'chart-bar', titleKey: 'sysConfigTabs.systemStatus' },
-            { index: 'upload', icon: 'cloud-upload', titleKey: 'sysConfigTabs.uploadSettings' },
+            { index: 'upload', icon: 'cloud-upload', titleKey: 'sysConfigTabs.channelManagement' },
+            { index: 'uploadSettings', icon: 'sliders-h', titleKey: 'sysConfigTabs.uploadSettings' },
             { index: 'security', icon: 'shield', titleKey: 'sysConfigTabs.securitySettings' },
             { index: 'page', icon: 'pager', titleKey: 'sysConfigTabs.pageSettings' },
             { index: 'others', icon: 'cog', titleKey: 'sysConfigTabs.otherSettings' }

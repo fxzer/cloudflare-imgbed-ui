@@ -2,8 +2,13 @@
     <div class="container">
         <el-header>
             <div class="header-content">
-                <DashboardTabs activeTab="systemConfig"></DashboardTabs>
+                <DashboardTabs activeTab="systemConfig" :show-upload-tab="false" :show-utilities="false"></DashboardTabs>
                 <div class="header-action">
+                    <AdminToggleDark class="header-theme-toggle"/>
+                    <LanguageSwitcher class="header-language-switcher"/>
+                    <el-tooltip :disabled="disableTooltip" :content="$t('dashboardTabs.fileUpload')" placement="bottom">
+                        <font-awesome-icon icon="upload" class="header-icon" @click="goUpload"></font-awesome-icon>
+                    </el-tooltip>
                     <el-tooltip :disabled="disableTooltip" :content="$t('sysConfig.logout')" placement="bottom">
                         <font-awesome-icon icon="sign-out-alt" class="header-icon" @click="handleLogout"></font-awesome-icon>
                     </el-tooltip>
@@ -20,9 +25,12 @@
 </template>
 <script>
 import DashboardTabs from '@/components/DashboardTabs.vue';
+import AdminToggleDark from '@/components/dashboard/AdminToggleDark.vue';
+import LanguageSwitcher from '@/components/LanguageSwitcher.vue';
 import SysConfigTabs from '@/components/config/SysConfigTabs.vue';
 import SysCogStatus from '@/components/config/SysCogStatus.vue';
 import SysCogUpload from '@/components/config/SysCogUpload.vue';
+import SysCogUploadPreferences from '@/components/config/SysCogUploadPreferences.vue';
 import SysCogSecurity from '@/components/config/SysCogSecurity.vue';
 import SysCogPage from '@/components/config/SysCogPage.vue';
 import SysCogOthers from '@/components/config/SysCogOthers.vue';
@@ -54,9 +62,12 @@ export default {
     },
     components: {
         DashboardTabs,
+        AdminToggleDark,
+        LanguageSwitcher,
         SysConfigTabs,
         SysCogStatus,
         SysCogUpload,
+        SysCogUploadPreferences,
         SysCogSecurity,
         SysCogPage,
         SysCogOthers
@@ -73,6 +84,8 @@ export default {
                     return SysCogStatus;
                 case 'upload':
                     return SysCogUpload;
+                case 'uploadSettings':
+                    return SysCogUploadPreferences;
                 case 'security':
                     return SysCogSecurity;
                 case 'page':
@@ -85,6 +98,9 @@ export default {
         }
     },
     methods: {
+        goUpload() {
+            this.$router.push('/');
+        },
         handleLogout() {
             const url = process.env.NODE_ENV === 'production' ? '/api/auth/logout' : '/api/api/auth/logout';
             fetch(url, {
@@ -212,7 +228,19 @@ html.dark .header-content:hover {
 
 .header-action {
     display: flex;
-    gap: 10px;
+    align-items: center;
+    gap: 14px;
+}
+
+.header-theme-toggle,
+.header-language-switcher,
+.header-icon {
+    flex: 0 0 auto;
+}
+
+.header-language-switcher {
+    --lang-icon-size: 1.3em;
+    --lang-icon-color: var(--admin-theme-toggle-color);
 }
 
 .main-container {

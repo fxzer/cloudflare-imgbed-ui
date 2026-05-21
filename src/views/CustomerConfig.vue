@@ -2,8 +2,10 @@
     <div class="container">
         <el-header>
             <div class="header-content">
-                <DashboardTabs activeTab="customerConfig"></DashboardTabs>
+                <DashboardTabs activeTab="customerConfig" :show-utilities="false"></DashboardTabs>
                 <div class="header-action">
+                    <AdminToggleDark class="header-theme-toggle"/>
+                    <LanguageSwitcher class="header-language-switcher"/>
                     <el-tooltip :disabled="disableTooltip" :content="$t('sysConfig.logout')" placement="bottom">
                         <font-awesome-icon icon="sign-out-alt" class="header-icon" @click="handleLogout"></font-awesome-icon>
                     </el-tooltip>
@@ -79,6 +81,8 @@
 <script>
 import fetchWithAuth from '@/utils/fetchWithAuth';
 import DashboardTabs from '@/components/DashboardTabs.vue';
+import AdminToggleDark from '@/components/dashboard/AdminToggleDark.vue';
+import LanguageSwitcher from '@/components/LanguageSwitcher.vue';
 import backgroundManager from '@/mixins/backgroundManager';
 
 export default {
@@ -98,7 +102,9 @@ export default {
         }
     },
     components: {
-        DashboardTabs
+        DashboardTabs,
+        AdminToggleDark,
+        LanguageSwitcher
     },
     computed: {
         disableTooltip() {
@@ -389,6 +395,18 @@ html.dark .header-content:hover {
 .header-action {
     display: flex;
     gap: 10px;
+    align-items: center;
+}
+
+.header-theme-toggle,
+.header-language-switcher,
+.header-icon {
+    flex: 0 0 auto;
+}
+
+.header-language-switcher {
+    --lang-icon-size: 1.3em;
+    --lang-icon-color: var(--admin-theme-toggle-color);
 }
 
 .main-container {

@@ -380,6 +380,7 @@
   },
   "sysConfigTabs": {
     "systemStatus": "系统状态",
+    "channelManagement": "渠道管理",
     "uploadSettings": "上传设置",
     "securitySettings": "安全设置",
     "pageSettings": "网页设置",

@@ -375,6 +375,7 @@
   },
   "sysConfigTabs": {
     "systemStatus": "System Status",
+    "channelManagement": "Channel Management",
     "uploadSettings": "Upload Settings",
     "securitySettings": "Security Settings",
     "pageSettings": "Page Settings",

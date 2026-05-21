@@ -3,7 +3,7 @@
         <el-container>
             <el-header>
             <div class="header-content">
-                <DashboardTabs activeTab="dashboard"></DashboardTabs>
+                <DashboardTabs activeTab="dashboard" :show-utilities="false"></DashboardTabs>
                 <div class="search-area">
                     <div class="search-card">
                         <el-input v-model="tempSearch" size="small" :placeholder="$t('dashboard.searchPlaceholder')" @keyup.enter="handleSearch">
@@ -79,6 +79,8 @@
                 <el-tooltip :disabled="disableTooltip" :content="viewMode === 'card' ? $t('dashboard.listView') : $t('dashboard.cardView')" placement="bottom">
                     <font-awesome-icon :icon="viewMode === 'card' ? 'list' : 'th-large'" class="header-icon" @click="toggleViewMode"></font-awesome-icon>
                 </el-tooltip>
+                <AdminToggleDark class="header-theme-toggle"/>
+                <LanguageSwitcher class="header-language-switcher"/>
                 <el-tooltip :disabled="disableTooltip" :content="$t('dashboard.logout')" placement="bottom">
                     <font-awesome-icon icon="sign-out-alt" class="header-icon" @click="handleLogout"></font-awesome-icon>
                 </el-tooltip>
@@ -390,6 +392,7 @@ import FileDetailDialog from '@/components/dashboard/FileDetailDialog.vue';
 import MobileActionSheet from '@/components/dashboard/MobileActionSheet.vue';
 import MobileDirectoryDrawer from '@/components/dashboard/MobileDirectoryDrawer.vue';
 import FilterDropdown from '@/components/dashboard/FilterDropdown.vue';
+import AdminToggleDark from '@/components/dashboard/AdminToggleDark.vue';
 import LanguageSwitcher from '@/components/LanguageSwitcher.vue';
 import { fileManager } from '@/utils/fileManager';
 import fetchWithAuth from '@/utils/fetchWithAuth';
@@ -471,6 +474,7 @@ components: {
     MobileDirectoryDrawer,
     FilterDropdown,
     MoveFileDialog,
+    AdminToggleDark,
     LanguageSwitcher
 },
 setup() {
@@ -2189,9 +2193,24 @@ html.dark .header-content:hover {
     gap: 15px;
 }
 
+.header-theme-toggle,
+.header-language-switcher,
+.header-icon {
+    flex: 0 0 auto;
+}
+
+.header-language-switcher {
+    --lang-icon-size: 1.3em;
+    --lang-icon-color: var(--admin-theme-toggle-color);
+}
+
 @media (max-width: 768px) {
     .header-content .actions {
         margin-top: 10px;
+    }
+
+    .header-language-switcher {
+        --lang-icon-size: 1.1em;
     }
 }
 
@@ -2254,7 +2273,6 @@ html.dark .header-content:hover {
 .search-card :deep(.el-input__wrapper) {
     border-radius: 20px;
     background: var(--admin-dashboard-search-card-bg-color);
-    box-shadow: var(--admin-dashboard-search-card-box-shadow);
     transition: background-color 0.3s;
 }
 

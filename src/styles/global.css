@@ -137,9 +137,9 @@ body {
     /* 上传页工具栏按钮 */
     --toolbar-button-bg-color: rgba(255, 255, 255, 0.5);
     /* 上传页工具栏按钮背景 */
-    --toolbar-button-shadow: 1px 2px 4px rgba(0, 0, 0, 0.3);
+    --toolbar-button-shadow: none;
     /* 上传页工具栏按钮阴影 */
-    --toolbar-button-shadow-hover: 1px 2px 4px rgba(0, 0, 0, 0.5);
+    --toolbar-button-shadow-hover: none;
     /* 上传页工具栏按钮悬浮阴影 */
     --toolbar-button-color: #327ECC;
     /* 上传页工具栏按钮文字颜色 */
@@ -221,9 +221,9 @@ body {
     /* admin-dashboard翻页按钮文字颜色 */
     --admin-dashboard-btn-bg-color: rgba(255, 255, 255, 0.3);
     /* admin-dashboard翻页按钮背景 */
-    --admin-dashboard-btn-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    --admin-dashboard-btn-shadow: none;
     /* admin-dashboard翻页按钮阴影 */
-    --admin-dashboard-btn-hover-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    --admin-dashboard-btn-hover-shadow: none;
     /* admin-dashboard翻页按钮悬浮阴影 */
     --admin-dashboard-imgcard-bg-color: rgba(255, 255, 255, 0.6);
     /* admin-dashboard-imgcard背景 */
@@ -274,8 +274,8 @@ body {
     /* 悬浮保存按钮 */
     --floating-btn-bg: linear-gradient(135deg, #409EFF, #66b1ff);
     --floating-btn-color: #ffffff;
-    --floating-btn-shadow: 0 4px 16px rgba(64, 158, 255, 0.4);
-    --floating-btn-shadow-hover: 0 8px 24px rgba(64, 158, 255, 0.5);
+    --floating-btn-shadow: none;
+    --floating-btn-shadow-hover: none;
     --floating-btn-right: 32px;
     --floating-btn-bottom: 32px;
 
@@ -351,9 +351,9 @@ body {
     /* 上传页工具栏按钮 */
     --toolbar-button-bg-color: rgba(0, 0, 0, 0.7);
     /* 上传页工具栏按钮背景 */
-    --toolbar-button-shadow: -1px 2px 4px rgba(255, 255, 255, 0.3);
+    --toolbar-button-shadow: none;
     /* 上传页工具栏按钮阴影 */
-    --toolbar-button-shadow-hover: -1px 2px 4px rgba(255, 255, 255, 0.5);
+    --toolbar-button-shadow-hover: none;
     /* 上传页工具栏按钮悬浮阴影 */
     --toolbar-button-color: #bedefd;
     /* 上传页工具栏按钮文字颜色 */
@@ -447,7 +447,7 @@ body {
     /* admin-header-content悬浮阴影 */
 
 
-    --admin-container-bg-color: linear-gradient(90deg, #464545 0%, #2d2d2d 100%);
+    --admin-container-bg-color: #000;
     /* admin-container背景 */
     --admin-container-color: #f0f0f0;
     /* admin-container字体颜色 */
@@ -469,9 +469,9 @@ body {
     /* admin-dashboard翻页按钮文字颜色 */
     --admin-dashboard-btn-bg-color: rgba(0, 0, 0, 0.3);
     /* admin-dashboard翻页按钮背景 */
-    --admin-dashboard-btn-shadow: 0 2px 4px rgba(255, 255, 255, 0.3);
+    --admin-dashboard-btn-shadow: none;
     /* admin-dashboard翻页按钮阴影 */
-    --admin-dashboard-btn-hover-shadow: 0 4px 6px rgba(255, 255, 255, 0.3);
+    --admin-dashboard-btn-hover-shadow: none;
     /* admin-dashboard翻页按钮悬浮阴影 */
     --admin-dashboard-imgcard-bg-color: rgba(0, 0, 0, 0.6);
     /* admin-dashboard-imgcard背景 */
@@ -518,8 +518,8 @@ body {
     /* 悬浮保存按钮 */
     --floating-btn-bg: linear-gradient(135deg, #409EFF, #2d8cf0);
     --floating-btn-color: #ffffff;
-    --floating-btn-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
-    --floating-btn-shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.5);
+    --floating-btn-shadow: none;
+    --floating-btn-shadow-hover: none;
 
     /* 玻璃效果卡片 */
     --glass-bg: rgba(30, 30, 30, 0.6);
@@ -1146,4 +1146,39 @@ html.dark .os-theme-dark,
 .os-theme-dark .os-scrollbar .os-scrollbar-handle {
     border-radius: 10px !important;
     transition: background-color 0.2s ease, opacity 0.2s ease !important;
+}
+/* === 按钮去阴影：统一用边框表达边界（仅作用于按钮，不影响卡片/表格/弹窗/表单等其他元素的阴影） === */
+button,
+button:hover,
+button:focus,
+button:active,
+.el-button,
+.el-button:hover,
+.el-button:focus,
+.el-button:active,
+.el-button.is-plain,
+.el-button.is-circle,
+.el-button.is-round,
+.admin-dashboard-btn,
+.admin-dashboard-btn:hover {
+    box-shadow: none !important;
+    filter: none !important;
+}
+
+/* 给原本靠阴影区分的按钮补 1px 边框 */
+button,
+.el-button,
+.admin-dashboard-btn {
+    border: 1px solid var(--el-border-color, rgba(255,255,255,0.2)) !important;
+}
+
+html.dark button,
+html.dark .el-button,
+html.dark .admin-dashboard-btn {
+    border-color: rgba(255,255,255,0.18) !important;
+}
+
+.lang-code{
+  font-size:16px;
+  font-weight: 600;
 }

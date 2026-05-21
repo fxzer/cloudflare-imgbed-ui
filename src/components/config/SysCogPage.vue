@@ -201,7 +201,7 @@ mounted() {
     border-bottom: 1px solid var(--el-border-color-lighter);
 }
 
-/* 表单样式 - 上下排列左对齐 */
+/* 表单样式 - 一行 4 列网格布局，节省纵向空间 */
 .first-settings :deep(.el-form) {
     padding: 16px 20px;
     background: var(--glass-bg);
@@ -211,6 +211,10 @@ mounted() {
     border: 1px solid var(--glass-border);
     box-shadow: var(--glass-shadow);
     transition: all 0.3s ease;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    column-gap: 24px;
+    row-gap: 4px;
 }
 
 .first-settings :deep(.el-form:hover) {
@@ -219,19 +223,25 @@ mounted() {
 }
 
 .first-settings :deep(.el-form-item) {
-    margin-bottom: 20px;
+    margin-bottom: 12px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    min-width: 0;
 }
 
 .first-settings :deep(.el-form-item:last-child) {
     margin-bottom: 0;
 }
 
+/* textarea 类项目跨 2 列展示 */
+.first-settings :deep(.el-form-item:has(.el-textarea)) {
+    grid-column: span 2;
+}
+
 .first-settings :deep(.el-form-item__label) {
     text-align: left;
-    padding-bottom: 8px;
+    padding-bottom: 6px;
     font-weight: 500;
     color: var(--el-text-color-primary);
     width: auto !important;
@@ -242,12 +252,8 @@ mounted() {
 
 .first-settings :deep(.el-form-item__content) {
     width: 100%;
-    max-width: 400px;
+    max-width: 100%;
     margin-left: 0 !important;
-}
-
-.first-settings :deep(.el-form-item:has(.el-textarea) .el-form-item__content) {
-    max-width: 600px;
 }
 
 .first-settings :deep(.el-input) {
@@ -262,17 +268,32 @@ mounted() {
     --el-switch-on-color: var(--el-color-primary);
 }
 
+/* 中等屏幕降为 2 列 */
+@media (max-width: 1200px) {
+    .first-settings :deep(.el-form) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .first-settings :deep(.el-form-item:has(.el-textarea)) {
+        grid-column: span 2;
+    }
+}
+
 /* 移动端适配 */
 @media (max-width: 768px) {
     .page-settings {
         padding: 15px;
         padding-bottom: 80px; /* 为悬浮按钮留出空间 */
     }
-    
+
     .first-settings :deep(.el-form) {
         padding: 12px 15px;
+        grid-template-columns: 1fr;
     }
-    
+
+    .first-settings :deep(.el-form-item:has(.el-textarea)) {
+        grid-column: span 1;
+    }
+
     .first-settings :deep(.el-form-item__content) {
         max-width: 100%;
     }

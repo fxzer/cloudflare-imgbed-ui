@@ -1932,11 +1932,23 @@ beforeDestroy() {
 
 /* Modern Radio Button Group */
 .paste-card-method-group {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
     background: var(--paste-method-group-bg, rgba(64, 158, 255, 0.08));
     border-radius: 14px;
     padding: 4px;
     border: 1px solid var(--paste-method-group-border, rgba(64, 158, 255, 0.15));
 }
+
+.paste-card-method-group :deep(.el-radio-button) {
+    margin-left: 0 !important;
+}
+
+.paste-card-method-group :deep(.el-radio-button + .el-radio-button) {
+    margin-left: 2px !important;
+}
+
 .paste-card-method-group :deep(.el-radio-button__inner) {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     border-radius: 10px !important;
@@ -2017,6 +2029,7 @@ beforeDestroy() {
         height: 30px;
         display: flex;
         align-items: center;
+        gap: 6px;
     }
 
     .paste-card-method-group :deep(.el-radio-button__inner) {

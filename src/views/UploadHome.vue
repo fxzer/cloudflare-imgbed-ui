@@ -1,138 +1,76 @@
 <template>
     <div class="container">
     <div class="upload-home">
-        <!-- 桌面端按钮 -->
-        <ToggleDark class="toggle-dark-button desktop-only"/>
-        <el-dropdown class="more-dropdown desktop-only" trigger="click" @command="handleDesktopMenuCommand">
-            <el-button class="more-button">
-                <font-awesome-icon icon="ellipsis-v" size="lg"/>
-            </el-button>
-            <template #dropdown>
-                <el-dropdown-menu>
-                    <el-dropdown-item command="showHistory">
-                        <font-awesome-icon icon="history" style="width: 16px; margin-right: 8px; text-align: center;"/>
-                        {{ $t('upload.history') }}
-                    </el-dropdown-item>
-                    <el-dropdown-item command="showAnnouncement" :disabled="!announcementAvailable">
-                        <font-awesome-icon icon="bullhorn" style="width: 16px; margin-right: 8px; text-align: center;"/>
-                        {{ $t('upload.announcement') }}
-                    </el-dropdown-item>
-                    <el-dropdown-item command="toggleLanguage">
-                        <font-awesome-icon icon="globe" style="width: 16px; margin-right: 8px; text-align: center;"/>
-                        {{ $i18n.locale === 'zh-CN' ? 'English' : '简体中文' }}
-                    </el-dropdown-item>
-                    <el-dropdown-item command="viewDocs">
-                        <font-awesome-icon icon="book" style="width: 16px; margin-right: 8px; text-align: center;"/>
-                        {{ $t('upload.viewDocs') }}
-                    </el-dropdown-item>
-                </el-dropdown-menu>
-            </template>
-        </el-dropdown>
-        <div class="upload-folder-container" :class="{ 'no-announcement': !announcementAvailable }">
-            <div class="upload-folder" :class="{ 'active': isFolderInputActive }">
-                <DirectorySuggestionInput
-                    v-if="showDirectorySuggestions"
-                    v-model="uploadFolder"
-                    class="inner-folder-input"
-                    :placeholder="$t('upload.folderPlaceholder')"
-                    @focus="handleFolderInputFocus"
-                    @blur="handleFolderInputBlur"
-                    @select="handleDirectorySelect"
-                />
-                <el-input
-                    v-else
-                    class="inner-folder-input"
-                    v-model="uploadFolder"
-                    :placeholder="$t('upload.folderPlaceholder')"
-                    @focus="handleFolderInputFocus"
-                    @blur="handleFolderInputBlur"
-                />
-            </div>
-            <DirectoryTreePicker
-                v-if="showDirectorySuggestions"
-                :current-directory="uploadFolder"
-                source="upload"
-                @select="handleDirectorySelect"
-            >
-                <template #trigger>
-                    <el-button class="directory-tree-trigger">
-                        <font-awesome-icon icon="folder-tree" />
+        <div class="top-toolbar">
+            <div class="top-control-group">
+                <div class="upload-folder-container">
+                    <div class="upload-folder" :class="{ 'active': isFolderInputActive }">
+                        <DirectorySuggestionInput
+                            v-if="showDirectorySuggestions"
+                            v-model="uploadFolder"
+                            class="inner-folder-input"
+                            :placeholder="$t('upload.folderPlaceholder')"
+                            @focus="handleFolderInputFocus"
+                            @blur="handleFolderInputBlur"
+                            @select="handleDirectorySelect"
+                        />
+                        <el-input
+                            v-else
+                            class="inner-folder-input"
+                            v-model="uploadFolder"
+                            :placeholder="$t('upload.folderPlaceholder')"
+                            @focus="handleFolderInputFocus"
+                            @blur="handleFolderInputBlur"
+                        />
+                    </div>
+                    <DirectoryTreePicker
+                        v-if="showDirectorySuggestions"
+                        :current-directory="uploadFolder"
+                        source="upload"
+                        @select="handleDirectorySelect"
+                    >
+                        <template #trigger>
+                            <el-button class="top-icon-button directory-tree-trigger">
+                                <font-awesome-icon icon="folder-tree" />
+                            </el-button>
+                        </template>
+                    </DirectoryTreePicker>
+                </div>
+                <el-tooltip :disabled="disableTooltip" :content="$t('upload.history')" placement="bottom">
+                    <el-button class="top-icon-button" @click="showHistory = true" circle>
+                        <font-awesome-icon icon="history" />
                     </el-button>
-                </template>
-            </DirectoryTreePicker>
-        </div>
-        <el-tooltip :content="$t('upload.switchUploadMethod')" placement="bottom" :disabled="disableTooltip">
-            <el-button class="upload-method-button desktop-only" @click="handleChangeUploadMethod">
-                <font-awesome-icon v-if="uploadMethod === 'default'"  icon="folder-open" class="upload-method-icon" size="lg"/>
-                <font-awesome-icon v-else-if="uploadMethod === 'paste'" icon="paste" class="upload-method-icon" size="lg"/>
-            </el-button>
-        </el-tooltip>
-
-        <!-- 移动端更多按钮 -->
-        <el-dropdown class="mobile-more-dropdown mobile-only" trigger="click" @command="handleMobileMenuCommand">
-            <el-button class="mobile-more-button">
-                <font-awesome-icon icon="ellipsis-v" size="lg"/>
-            </el-button>
-            <template #dropdown>
-                <el-dropdown-menu>
-                    <el-dropdown-item command="toggleTheme">
-                        <font-awesome-icon :icon="getThemeIcon()" style="width: 16px; margin-right: 8px; text-align: center;"/>
-                        {{ getThemeText() }}
-                    </el-dropdown-item>
-                    <el-dropdown-item command="toggleUploadMethod">
-                        <font-awesome-icon :icon="uploadMethod === 'default' ? 'paste' : 'folder-open'" style="width: 16px; margin-right: 8px; text-align: center;"/>
-                        {{ uploadMethod === 'default' ? $t('upload.pasteUpload') : $t('upload.fileUpload') }}
-                    </el-dropdown-item>
-                    <el-dropdown-item command="showHistory">
-                        <font-awesome-icon icon="history" style="width: 16px; margin-right: 8px; text-align: center;"/>
-                        {{ $t('upload.history') }}
-                    </el-dropdown-item>
-                    <el-dropdown-item command="showAnnouncement" :disabled="!announcementAvailable">
-                        <font-awesome-icon icon="bullhorn" style="width: 16px; margin-right: 8px; text-align: center;"/>
-                        {{ $t('upload.announcement') }}
-                    </el-dropdown-item>
-                    <el-dropdown-item command="toggleLanguage">
-                        <font-awesome-icon icon="globe" style="width: 16px; margin-right: 8px; text-align: center;"/>
-                        {{ $i18n.locale === 'zh-CN' ? 'English' : '简体中文' }}
-                    </el-dropdown-item>
-                    <el-dropdown-item command="viewDocs">
-                        <font-awesome-icon icon="book" style="width: 16px; margin-right: 8px; text-align: center;"/>
-                        {{ $t('upload.viewDocs') }}
-                    </el-dropdown-item>
-                </el-dropdown-menu>
-            </template>
-        </el-dropdown>
-        <div class="toolbar-manage">
-            <el-button class="toolbar-manage-button" :class="{ 'active': isToolBarOpen}" size="large" @click="handleOpenToolbar" circle>
-                <font-awesome-icon v-if="!isToolBarOpen"  icon="bars" class="manage-icon" size="lg"/>
-                <font-awesome-icon v-else icon="times" class="manage-icon" size="lg"/>
-            </el-button>
-        </div>
-        <div class="toolbar">
-            <el-tooltip :disabled="disableTooltip" :content="$t('upload.settings')" placement="top">
-                <el-button class="toolbar-button compress-button" :class="{ 'active': isToolBarOpen}" size="large" @click="openCompressDialog" circle>
-                    <font-awesome-icon icon="cloud-upload" class="compress-icon" size="lg"/>
-                </el-button>
-            </el-tooltip>
-            <el-tooltip :disabled="disableTooltip" :content="$t('upload.linkFormat')" placement="left">
-                <el-button class="toolbar-button link-button" :class="{ 'active': isToolBarOpen}" size="large" @click="openUrlDialog" circle>
-                    <font-awesome-icon icon="link" class="link-icon" size="lg"/>
-                </el-button>
-            </el-tooltip>
-            <el-tooltip :disabled="disableTooltip" :content="$t('upload.manage')" placement="left">
-                <el-button class="toolbar-button config-button" :class="{ 'active': isToolBarOpen}" size="large" @click="handleManage" circle>
-                    <font-awesome-icon icon="cog" class="config-icon" size="lg"/>
-                </el-button>
-            </el-tooltip>
-            <el-tooltip :disabled="disableTooltip" :content="$t('upload.logout')" placement="left">
-                <el-button class="toolbar-button sign-out-button" :class="{ 'active': isToolBarOpen}" size="large" @click="handleLogout" circle>
-                    <font-awesome-icon icon="sign-out-alt" class="sign-out-icon" size="lg"/>
-                </el-button>
-            </el-tooltip>
+                </el-tooltip>
+                <el-tooltip :disabled="disableTooltip" :content="$t('upload.viewDocs')" placement="bottom">
+                    <el-button class="top-icon-button" @click="viewDocs" circle>
+                        <font-awesome-icon icon="book" />
+                    </el-button>
+                </el-tooltip>
+                <LanguageSwitcher class="top-language-switcher"/>
+                <ToggleDark class="top-theme-toggle"/>
+            </div>
+            <div class="top-control-group account-control-group">
+                <el-tooltip :disabled="disableTooltip" :content="$t('dashboardTabs.systemSettings')" placement="bottom">
+                    <el-button class="top-icon-button" @click="handleManage" circle>
+                        <font-awesome-icon icon="cogs" />
+                    </el-button>
+                </el-tooltip>
+                <el-tooltip :disabled="disableTooltip" :content="$t('upload.logout')" placement="bottom">
+                    <el-button class="top-icon-button logout-action" @click="handleLogout" circle>
+                        <font-awesome-icon icon="sign-out-alt" />
+                    </el-button>
+                </el-tooltip>
+            </div>
         </div>
         <Logo :useConfigLink="true" />
         <div class="header">
             <h1 class="title"><a class="main-title" href="https://github.com/MarSeventh/CloudFlare-ImgBed" target="_blank">{{ ownerName }}</a> ImgHub</h1>
+            <el-segmented
+                class="upload-method-segmented"
+                :model-value="uploadMethod"
+                :options="uploadMethodOptions"
+                @change="setUploadMethod"
+            />
         </div>
         <UploadForm 
             :selectedUrlForm="selectedUrlForm" 
@@ -151,70 +89,6 @@
             :uploadFolder="uploadFolder"
             :convertToWebp="convertToWebp"
             class="upload"
-        />
-        <el-dialog :title="$t('settings.linkFormatTitle')" v-model="showUrlDialog" :width="dialogWidth" :show-close="false" class="settings-dialog">
-            <div class="dialog-section">
-                <div class="section-header">
-                    <span class="section-title">{{ $t('settings.defaultCopyLink') }}</span>
-                </div>
-                <div class="section-content">
-                    <el-radio-group v-model="selectedUrlForm" @change="changeUrlForm" class="radio-card-group grid-2x2">
-                        <el-radio value="url" class="radio-card">
-                            <font-awesome-icon icon="link" class="radio-icon"/>
-                            <span>{{ $t('settings.rawLink') }}</span>
-                        </el-radio>
-                        <el-radio value="md" class="radio-card">
-                            <font-awesome-icon icon="code" class="radio-icon"/>
-                            <span>MarkDown</span>
-                        </el-radio>
-                        <el-radio value="html" class="radio-card">
-                            <font-awesome-icon icon="code-branch" class="radio-icon"/>
-                            <span>HTML</span>
-                        </el-radio>
-                        <el-radio value="ubb" class="radio-card">
-                            <font-awesome-icon icon="quote-right" class="radio-icon"/>
-                            <span>BBCode</span>
-                        </el-radio>
-                    </el-radio-group>
-                </div>
-            </div>
-            
-            <div class="dialog-section">
-                <div class="section-header">
-                    <span class="section-title">{{ $t('settings.customLink') }}</span>
-                    <el-tooltip :content="$t('settings.customLinkTooltip')" placement="top" raw-content>
-                        <font-awesome-icon icon="question-circle" class="section-help-icon"/>
-                    </el-tooltip>
-                </div>
-                <div class="section-content">
-                    <div class="setting-item">
-                        <span class="setting-label">{{ $t('settings.enableCustom') }}</span>
-                        <el-switch v-model="useCustomUrl" active-value="true" inactive-value="false" />
-                    </div>
-                    <div class="setting-item" v-if="useCustomUrl === 'true'">
-                        <span class="setting-label">{{ $t('settings.customPrefix') }}</span>
-                        <el-input v-model="customUrlPrefix" :placeholder="$t('settings.customPrefixPlaceholder')" class="setting-input"/>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="dialog-action">
-                <el-button type="primary" @click="showUrlDialog = false" class="confirm-btn">{{ $t('settings.confirm') }}</el-button>
-            </div>
-        </el-dialog>
-        <UploadSettingsDialog
-            v-model="showCompressDialog"
-            v-model:uploadChannel="uploadChannel"
-            v-model:channelName="channelName"
-            :currentChannelList="currentChannelList"
-            v-model:uploadFolder="uploadFolder"
-            v-model:autoRetry="autoRetry"
-            v-model:uploadNameType="uploadNameType"
-            v-model:convertToWebp="convertToWebp"
-            v-model:customerCompress="customerCompress"
-            v-model:compressBar="compressBar"
-            v-model:compressQuality="compressQuality"
-            v-model:serverCompress="serverCompress"
         />
     </div>
     <Footer class="footer"/>
@@ -235,11 +109,10 @@ import UploadForm from '@/components/upload/UploadForm.vue'
 import Footer from '@/components/Footer.vue'
 import ToggleDark from '@/components/ToggleDark.vue'
 import Logo from '@/components/Logo.vue'
-import { setLocale } from '@/locales'
 import UploadHistory from '@/components/upload/UploadHistory.vue'
-import UploadSettingsDialog from '@/components/upload/UploadSettingsDialog.vue'
 import DirectoryTreePicker from '@/components/DirectoryTreePicker.vue'
 import DirectorySuggestionInput from '@/components/DirectorySuggestionInput.vue'
+import LanguageSwitcher from '@/components/LanguageSwitcher.vue'
 import backgroundManager from '@/mixins/backgroundManager'
 import axios from '@/utils/axios'
 import { ref } from 'vue'
@@ -252,8 +125,6 @@ export default {
     data() {
         return {
             selectedUrlForm: ref(''),
-            showUrlDialog: false,
-            showCompressDialog: false,
             customerCompress: true, //上传前压缩
             compressQuality: 4, //压缩后大小
             compressBar: 5, //压缩阈值
@@ -267,14 +138,12 @@ export default {
             useCustomUrl: 'false', //是否启用自定义链接格式
             autoRetry: true, //失败自动切换
             useDefaultWallPaper: false,
-            isToolBarOpen: false, //是否打开工具栏
             uploadMethod: 'default', //上传方式
             uploadFolder: '', // 上传文件夹
             isFolderInputActive: false,
             showAnnouncementDialog: false, // 控制公告弹窗的显示
             announcementContent: '', // 公告内容
-            showHistory: false,
-            themeMode: 'auto', // 主题模式：light, dark, auto
+            showHistory: false
         }
     },
     watch: {
@@ -362,9 +231,6 @@ export default {
             // 全局自定义链接前缀
             return this.userConfig?.urlPrefix || `${window.location.protocol}//${window.location.host}/file/`
         },
-        announcementAvailable() {
-            return !!this.userConfig?.announcement
-        },
         // 是否显示目录候选项（从 userConfig 获取）
         showDirectorySuggestions() {
             return this.userConfig?.showDirectorySuggestions ?? false
@@ -372,6 +238,12 @@ export default {
         // 当前渠道类型对应的渠道列表
         currentChannelList() {
             return this.availableChannels[this.uploadChannel] || []
+        },
+        uploadMethodOptions() {
+            return [
+                { label: this.$t('upload.fileUpload'), value: 'default' },
+                { label: this.$t('upload.pasteUpload'), value: 'paste' }
+            ]
         }
     },
     mounted() {
@@ -402,18 +274,6 @@ export default {
         // 读取用户设置的上传文件夹
         this.uploadFolder = this.storeUploadFolder || this.userConfig?.defaultUploadFolder || ''
 
-        // 从 Vuex store 读取主题模式状态
-        const cusDarkMode = this.$store.getters.cusDarkMode
-        const useDarkMode = this.$store.getters.useDarkMode
-        
-        if (!cusDarkMode) {
-            this.themeMode = 'auto'
-        } else if (useDarkMode) {
-            this.themeMode = 'dark'
-        } else {
-            this.themeMode = 'light'
-        }
-
         // 首次访问公告
         const visited = localStorage.getItem('visitedUploadHome')
         const announcement = this.userConfig?.announcement
@@ -429,9 +289,9 @@ export default {
         ToggleDark,
         Logo,
         UploadHistory,
-        UploadSettingsDialog,
         DirectoryTreePicker,
-        DirectorySuggestionInput
+        DirectorySuggestionInput,
+        LanguageSwitcher
     },
     methods: {
         // 获取可用渠道列表
@@ -492,7 +352,7 @@ export default {
             }
         },
         handleManage() {
-            this.$router.push('/dashboard')
+            this.$router.push('/systemConfig#uploadSettings')
         },
         // 解析布尔值
         parseBoolean(value, defaultValue) {
@@ -507,21 +367,12 @@ export default {
             const num = parseFloat(value)
             return isNaN(num) ? defaultValue : num
         },
-        openUrlDialog() {
-            this.showUrlDialog = true
-        },
         handleLogout() {
             axios.post('/api/auth/logout', { authType: 'user' }, { withCredentials: true }).finally(() => {
                 this.$store.commit('setUserLoggedIn', false);
                 this.$router.push('/login')
                 this.$message.success(this.$t('upload.logoutSuccess'))
             })
-        },
-        changeUrlForm() {
-            this.$store.commit('setUploadCopyUrlForm', this.selectedUrlForm)
-        },
-        openCompressDialog() {
-            this.showCompressDialog = true
         },
         updateCompressConfig(key, value) {
             this.$store.commit('setCompressConfig', { key, value })
@@ -532,83 +383,13 @@ export default {
         updateStoreUploadNameType(value) {
             this.$store.commit('setStoreUploadNameType', value)
         },
-        handleOpenToolbar () {
-            this.isToolBarOpen = !this.isToolBarOpen
-            // 等过渡动画结束，向active类添加pointer-events属性，使其可以点击
-            setTimeout(() => {
-                const buttons = document.querySelectorAll('.toolbar-button')
-                buttons.forEach(button => {
-                    button.style.pointerEvents = this.isToolBarOpen? 'auto' : 'none'
-                })
-            }, 300)
+        setUploadMethod(method) {
+            if (method === this.uploadMethod) return
+            this.uploadMethod = method
+            this.$store.commit('setUploadMethod', method)
         },
-        handleChangeUploadMethod() {
-            this.uploadMethod = this.uploadMethod === 'default'? 'paste' : 'default'
-            this.$store.commit('setUploadMethod', this.uploadMethod)
-        },
-        handleMobileMenuCommand(command) {
-            if (command === 'toggleTheme') {
-                // 循环切换：auto -> light -> dark -> auto
-                if (this.themeMode === 'auto') {
-                    // 切换到亮色
-                    this.themeMode = 'light'
-                    this.$store.commit('setCusDarkMode', true)
-                    this.$store.commit('setUseDarkMode', false)
-                } else if (this.themeMode === 'light') {
-                    // 切换到暗色
-                    this.themeMode = 'dark'
-                    this.$store.commit('setCusDarkMode', true)
-                    this.$store.commit('setUseDarkMode', true)
-                } else {
-                    // 切换到自动
-                    this.themeMode = 'auto'
-                    this.$store.commit('setCusDarkMode', false)
-                }
-            } else if (command === 'toggleUploadMethod') {
-                this.handleChangeUploadMethod()
-            } else if (command === 'viewDocs') {
-                window.open('https://cfbed.sanyue.de/qa/', '_blank')
-            } else if (command === 'showHistory') {
-                this.showHistory = true
-            } else if (command === 'showAnnouncement') {
-                this.handleShowAnnouncement()
-            } else if (command === 'toggleLanguage') {
-                const next = this.$i18n.locale === 'zh-CN' ? 'en' : 'zh-CN'
-                setLocale(next)
-            }
-        },
-        handleDesktopMenuCommand(command) {
-            if (command === 'viewDocs') {
-                window.open('https://cfbed.sanyue.de/qa/', '_blank')
-            } else if (command === 'showHistory') {
-                this.showHistory = true
-            } else if (command === 'showAnnouncement') {
-                this.handleShowAnnouncement()
-            } else if (command === 'toggleLanguage') {
-                const next = this.$i18n.locale === 'zh-CN' ? 'en' : 'zh-CN'
-                setLocale(next)
-            }
-        },
-        getThemeIcon() {
-            // 显示下一个模式的图标
-            if (this.themeMode === 'auto') return 'sun'  // auto -> light
-            if (this.themeMode === 'light') return 'moon'  // light -> dark
-            return 'adjust'  // dark -> auto
-        },
-        getThemeText() {
-            // 显示下一个模式的文字
-            if (this.themeMode === 'auto') return this.$t('theme.lightMode')
-            if (this.themeMode === 'light') return this.$t('theme.darkMode')
-            return this.$t('theme.autoMode')
-        },
-        handleShowAnnouncement() {
-            const announcement = this.userConfig?.announcement
-            if (announcement) {
-                this.announcementContent = announcement
-                this.showAnnouncementDialog = true
-            } else {
-                this.$message.info(this.$t('upload.noAnnouncement'))
-            }
+        viewDocs() {
+            window.open('https://cfbed.sanyue.de/qa/', '_blank')
         },
         // 处理目录选择
         handleDirectorySelect(path) {
@@ -708,135 +489,118 @@ export default {
 }
 
 
-/* 桌面端和移动端显示控制 */
-.desktop-only {
-    display: inline-block;
-}
-.mobile-only {
-    display: none;
-}
-@media (max-width: 768px) {
-    .desktop-only {
-        display: none !important;
-    }
-    .mobile-only {
-        display: flex !important;
-    }
-}
-
-.toggle-dark-button {
-    border: none;
-    transition: all 0.3s ease;
-    background-color: var(--toolbar-button-bg-color);
-    box-shadow: var(--toolbar-button-shadow);
-    backdrop-filter: blur(10px);
-    border-radius: 12px;
-    position: fixed;
-    top: 30px;
-    right: 80px;
-}
-
-.more-dropdown {
+.top-toolbar {
     position: fixed;
     top: 30px;
     right: 30px;
-    z-index: 100;
+    z-index: 120;
+    display: flex;
+    align-items: center;
+    gap: 20px;
 }
-.more-dropdown .more-button {
+
+.top-control-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.top-control-group :deep(.el-button) {
+    margin-left: 0;
+}
+
+.top-icon-button {
     width: 2.5rem;
     height: 2.5rem;
-    display: flex;
-    justify-content: center;
+    display: inline-flex;
     align-items: center;
-    border: none;
+    justify-content: center;
+    border: 1px solid rgba(255, 255, 255, 0.18);
     transition: all 0.3s ease;
     background-color: var(--toolbar-button-bg-color);
-    box-shadow: var(--toolbar-button-shadow);
+    box-shadow: none;
     backdrop-filter: blur(10px);
     color: var(--theme-toggle-color);
     border-radius: 12px;
     outline: none;
     padding: 0;
 }
-.more-dropdown .more-button:hover {
-    transform: scale(1.05);
-    box-shadow: var(--toolbar-button-shadow-hover);
-}
 
-.upload-method-button {
+.top-language-switcher {
+    --lang-icon-size: 1.18em;
+    --lang-icon-color: var(--theme-toggle-color);
     width: 2.5rem;
     height: 2.5rem;
-    display: flex;
-    justify-content: center;
+    display: inline-flex;
     align-items: center;
-    border: none;
-    transition: all 0.3s ease;
-    background-color: var(--toolbar-button-bg-color);
-    box-shadow: var(--toolbar-button-shadow);
-    backdrop-filter: blur(10px);
-    color: var(--theme-toggle-color);
+    justify-content: center;
     border-radius: 12px;
-    position: fixed;
-    top: 30px;
-    right: 130px;
-    outline: none;
-}
-@media (max-width: 768px) {
-    .upload-method-button {
-        width: 2rem;
-        height: 2rem;
-    }
-}
-.upload-method-icon {
-    outline: none;
+    background-color: var(--toolbar-button-bg-color);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: none;
+    backdrop-filter: blur(10px);
+    box-sizing: border-box;
 }
 
-/* 移动端更多按钮 */
-.mobile-more-dropdown {
-    position: fixed;
-    top: 30px;
-    right: 30px;
-    z-index: 100;
-}
-.mobile-more-button {
-    width: 2rem;
-    height: 2rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: none;
-    transition: all 0.3s ease;
+.top-theme-toggle {
+    width: 2.5rem !important;
+    height: 2.5rem !important;
     background-color: var(--toolbar-button-bg-color);
-    box-shadow: var(--toolbar-button-shadow);
+    border: 1px solid rgba(255, 255, 255, 0.18) !important;
+    box-shadow: none;
     backdrop-filter: blur(10px);
-    color: var(--theme-toggle-color);
     border-radius: 12px;
-    outline: none;
-    padding: 0;
+    box-sizing: border-box;
 }
-.mobile-more-button:hover {
-    transform: scale(1.05);
-    box-shadow: var(--toolbar-button-shadow-hover);
+
+.top-icon-button.logout-action {
+    color: #f56c6c;
+}
+
+.top-icon-button.is-disabled {
+    opacity: 0.35;
+}
+
+.top-language-switcher :deep(.lang-current) {
+    min-width: 0;
+    min-height: 0;
+    border: none;
+    background: transparent;
 }
 
 /* 上传文件输入框容器样式 */
 .upload-folder-container {
     display: flex;
     align-items: center;
-    position: fixed;
-    top: 30px;
-    right: 180px;
-    z-index: 100;
-}
-.upload-folder-container.no-announcement {
-    right: 180px;
+    gap: 8px;
 }
 @media (max-width: 768px) {
-    .upload-folder-container {
-        right: 70px;
+    .top-toolbar {
+        top: 24px;
+        left: 12px;
+        right: 12px;
+        justify-content: flex-end;
+        gap: 14px;
     }
-    .upload-folder-container.no-announcement {
-        right: 70px;
+
+    .top-control-group {
+        gap: 4px;
+    }
+
+    .top-icon-button,
+    .top-language-switcher {
+        width: 1.85rem;
+        height: 1.85rem;
+        border-radius: 10px;
+    }
+
+    .top-language-switcher {
+        --lang-icon-size: 1em;
+    }
+
+    .top-theme-toggle {
+        width: 1.85rem !important;
+        height: 1.85rem !important;
     }
 }
 
@@ -852,11 +616,11 @@ export default {
 }
 @media (max-width: 768px) {
     .upload-folder {
-        width: 80px;
-        height: 2rem;
+        width: 76px;
+        height: 1.85rem;
     }
     .upload-folder.active {
-        width: 120px;
+        width: 96px;
     }
 }
 
@@ -868,10 +632,10 @@ export default {
     justify-content: center;
     align-items: center;
     border: none;
-    margin-left: 10px;
+    margin-left: 0;
     transition: all 0.3s ease;
     background-color: var(--toolbar-button-bg-color);
-    box-shadow: var(--toolbar-button-shadow);
+    box-shadow: none;
     backdrop-filter: blur(10px);
     color: var(--theme-toggle-color);
     border-radius: 12px;
@@ -879,12 +643,12 @@ export default {
 }
 .directory-tree-trigger:hover {
     transform: scale(1.05);
-    box-shadow: var(--toolbar-button-shadow-hover);
+    box-shadow: none;
 }
 @media (max-width: 768px) {
     .directory-tree-trigger {
-        width: 2rem;
-        height: 2rem;
+        width: 1.85rem;
+        height: 1.85rem;
     }
 }
 
@@ -900,146 +664,24 @@ export default {
 .upload-folder :deep(.el-input__wrapper) {
     border-radius: 12px;
     background-color: var(--toolbar-button-bg-color);
-    box-shadow: var(--toolbar-button-shadow);
+    box-shadow: none;
     backdrop-filter: blur(10px);
-    border: none;
+    border: 1px solid rgba(64, 158, 255, 0.36);
     height: 100%;
 }
 
-.toolbar-manage {
-    position: fixed;
-    bottom: 50px;
-    right: 30px;
-    z-index: 200;
-}
-.toolbar-manage-button {
-    border: none;
-    transition: all 0.3s ease, border-radius 0.4s ease;
-    margin-left: 0;
-    background-color: var(--toolbar-button-bg-color);
-    box-shadow: var(--toolbar-button-shadow);
-    backdrop-filter: blur(10px);
-    color: var(--toolbar-button-color);
-    outline: none;
-    border-radius: 12px;
-}
-.toolbar-manage-button.active {
-    border-radius: 50%;
-}
-
-.toolbar {
-    position: fixed;
-    bottom: 50px;
-    right: 30px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    z-index: 100;
-}
-
-.toolbar-button {
-    border: none;
-    transition: all 0.3s ease;
-    margin-left: 0;
-    background-color: var(--toolbar-button-bg-color);
-    box-shadow: var(--toolbar-button-shadow);
-    backdrop-filter: blur(10px);
-    color: var(--toolbar-button-color);
+.upload-folder.active :deep(.el-input__wrapper),
+.upload-folder:hover :deep(.el-input__wrapper) {
+    border-color: var(--el-color-primary);
 }
 
 /* 按钮悬停效果 */
-.toggle-dark-button:hover,
 .info-container:hover,
-.upload-method-button:hover,
-.toolbar-manage-button:hover,
-.toolbar-button:hover {
+.top-icon-button:hover,
+.top-language-switcher:hover,
+.top-theme-toggle:hover {
     transform: scale(1.05);
-    box-shadow: var(--toolbar-button-shadow-hover);
-}
-.upload-folder:hover {
-    box-shadow: var(--toolbar-button-shadow-hover);
-}
-
-/* 按钮形成扇形 */
-.compress-button {
-    position: fixed;
-    bottom: 50px;
-    right: 30px;
-    opacity: 0;
-    transition: all 0.3s ease, transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55), opacity 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-    pointer-events: none;
-}
-.compress-button.active {
-    transform: translateY(-75px);
-    opacity: 1;
-}
-
-.link-button {
-    position: fixed;
-    bottom: 50px;
-    right: 30px;
-    opacity: 0;
-    transition: all 0.3s ease, transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55), opacity 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-    pointer-events: none;
-}
-.link-button.active {
-    transform: translateY(-58px) translateX(-50px);
-    opacity: 1;
-}
-
-.config-button {
-    position: fixed;
-    bottom: 50px;
-    right: 30px;
-    opacity: 0;
-    transition: all 0.3s ease, transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55), opacity 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-    pointer-events: none;
-}
-.config-button.active {
-    transform: translateY(-11px) translateX(-75px);
-    opacity: 1;
-}
-
-.sign-out-button {
-    position: fixed;
-    bottom: 50px;
-    right: 30px;
-    opacity: 0;
-    transition: all 0.3s ease, transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55), opacity 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-    pointer-events: none;
-}
-.sign-out-button.active {
-    transform: translateY(42px) translateX(-68px);
-    opacity: 1;
-}
-
-/* 非移动端时的图标动画样式 */
-@media (min-width: 768px) {
-    .compress-button:hover {
-        transform: translateY(-77px);
-    }
-    .link-button:hover {
-        transform: translateY(-60px) translateX(-52px);
-    }
-    .config-button:hover {
-        transform: translateY(-12px) translateX(-77px);
-    }
-    .sign-out-button:hover {
-        transform: translateY(44px) translateX(-70px);
-    }
-
-    .compress-icon:hover {
-        animation: scale 0.5s ease-in-out;
-    }
-    .config-icon:hover {
-        animation: spin 0.5s ease-in-out;
-    }
-    .link-icon:hover {
-        animation: rotate-shake 0.5s ease-in-out;
-    }
-    .sign-out-icon:hover {
-        animation: shake 0.5s ease-in-out;
-    }
+    box-shadow: none;
 }
 
 
@@ -1058,6 +700,7 @@ export default {
 
 .header {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     padding: 15px;
@@ -1068,6 +711,27 @@ export default {
     position: relative;
     top: -3vh;
     transition: all 0.3s ease;
+}
+
+.upload-method-segmented {
+    --el-segmented-bg-color: rgba(64, 158, 255, 0.08);
+    --el-segmented-item-selected-bg-color: var(--el-color-primary);
+    --el-segmented-item-selected-color: #fff;
+    margin-top: 6px;
+    min-height: 38px;
+    padding: 4px;
+    border-radius: 12px;
+    background: rgba(64, 158, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-sizing: border-box;
+}
+
+.upload-method-segmented :deep(.el-segmented__item) {
+    min-width: 86px;
+    min-height: 30px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
 }
 .title {
     font-size: 2.5rem;
