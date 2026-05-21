@@ -149,6 +149,7 @@
     "logout": "Logout",
     "rootDirectory": "Root",
     "totalFiles": "{count} files",
+    "refreshCurrentFolder": "Refresh current folder",
     "noMatchingFiles": "No matching files or folders found",
     "currentDirEmpty": "Current directory is empty",
     "adjustSearchHint": "Try adjusting search criteria or filters",

@@ -151,6 +151,7 @@
     "logout": "退出登录",
     "rootDirectory": "根目录",
     "totalFiles": "共 {count} 个文件",
+    "refreshCurrentFolder": "刷新当前目录",
     "noMatchingFiles": "未找到匹配的文件或文件夹",
     "currentDirEmpty": "当前目录为空",
     "adjustSearchHint": "尝试调整搜索条件或筛选器",

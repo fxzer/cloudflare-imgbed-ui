@@ -110,18 +110,30 @@
                         </el-breadcrumb-item>
                     </el-breadcrumb>
                 </div>
-                <span class="stats-badge" :title="$t('dashboard.totalFiles', { count: $data.Number })">
-                    <font-awesome-icon icon="database" class="stats-badge-icon"/>
-                    {{ Number }}
-                </span>
+                <div class="breadcrumb-actions">
+                    <span class="stats-badge" :title="$t('dashboard.totalFiles', { count: $data.Number })">
+                        <font-awesome-icon icon="database" class="stats-badge-icon"/>
+                        {{ Number }}
+                    </span>
+                    <button
+                        type="button"
+                        class="stats-refresh-button"
+                        :title="$t('dashboard.refreshCurrentFolder')"
+                        :aria-label="$t('dashboard.refreshCurrentFolder')"
+                        :disabled="refreshLoading"
+                        @click="refreshFileList"
+                    >
+                        <font-awesome-icon icon="sync" :class="{ 'fa-spin': refreshLoading }"/>
+                    </button>
+                </div>
             </div>
             
             <!-- 卡片视图 -->
             <div v-if="viewMode === 'card'" class="content" ref="cardContainerRef">
                 <!-- 加载骨架屏 -->
-                <SkeletonLoader v-if="loading" type="card" :count="15" />
+                <SkeletonLoader v-if="isContentLoading" type="card" :count="15" />
                 <!-- 空状态 -->
-                <div v-else-if="paginatedTableData.length === 0" class="empty-state">
+                <div v-else-if="showEmptyState" class="empty-state">
                     <font-awesome-icon icon="folder-open" class="empty-icon" />
                     <p class="empty-text">{{ hasSearchOrFilter ? $t('dashboard.noMatchingFiles') : $t('dashboard.currentDirEmpty') }}</p>
                     <p class="empty-hint">{{ hasSearchOrFilter ? $t('dashboard.adjustSearchHint') : $t('dashboard.uploadHint') }}</p>
@@ -182,9 +194,9 @@
                     <div class="list-col list-col-actions">{{ $t('dashboard.actions') }}</div>
                 </div>
                 <!-- 列表骨架屏 -->
-                <SkeletonLoader v-if="loading" type="list" :count="15" />
+                <SkeletonLoader v-if="isContentLoading" type="list" :count="15" />
                 <!-- 空状态 -->
-                <div v-else-if="paginatedTableData.length === 0" class="empty-state list-empty">
+                <div v-else-if="showEmptyState" class="empty-state list-empty">
                     <font-awesome-icon icon="folder-open" class="empty-icon" />
                     <p class="empty-text">{{ hasSearchOrFilter ? $t('dashboard.noMatchingFiles') : $t('dashboard.currentDirEmpty') }}</p>
                     <p class="empty-hint">{{ hasSearchOrFilter ? $t('dashboard.adjustSearchHint') : $t('dashboard.uploadHint') }}</p>
@@ -521,6 +533,12 @@ computed: {
     // 判断是否处于搜索或筛选模式
     hasSearchOrFilter() {
         return this.isSearchMode || this.activeFilterCount > 0;
+    },
+    isContentLoading() {
+        return this.loading || this.refreshLoading;
+    },
+    showEmptyState() {
+        return !this.isContentLoading && this.paginatedTableData.length === 0;
     },
     paginatedTableData() {
         const sortedData = this.sortData(this.filteredTableData);
@@ -1738,8 +1756,10 @@ methods: {
     },
     
     // 获取文件列表
-    async fetchFileList() {
-        this.loading = true;
+    async fetchFileList({ manageLoading = false } = {}) {
+        if (manageLoading) {
+            this.loading = true;
+        }
         try {
             // 从本地存储获取数据
             const data = fileManager.getLocalFileList();
@@ -1778,7 +1798,9 @@ methods: {
             console.error('Error fetching file list:', error);
             this.$message.error(this.$t('dashboard.fetchFileListFailed'));
         } finally {
-            this.loading = false;
+            if (manageLoading) {
+                this.loading = false;
+            }
         }
     },
     // 刷新文件列表
@@ -2136,17 +2158,26 @@ html.dark .header-content:hover {
 }
 
 /* 文件数量小徽章 */
+.breadcrumb-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
 .stats-badge {
     display: inline-flex;
     align-items: center;
-    gap: 5px;
+    gap: 8px;
     font-size: 14px;
     font-weight: 500;
     color: var(--el-text-color-secondary);
     background: var(--el-fill-color-light);
-    padding: 4px 10px;
+    padding: 0 12px;
+    height: 32px;
     border-radius: 12px;
     border: 1px solid var(--el-border-color-lighter);
+    box-sizing: border-box;
     transition: all 0.2s ease;
     white-space: nowrap;
     flex-shrink: 0;
@@ -2163,15 +2194,58 @@ html.dark .header-content:hover {
     opacity: 0.8;
 }
 
+.stats-refresh-button {
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    padding: 0;
+    border-radius: 12px;
+    border: 1px solid var(--el-border-color-lighter);
+    background: var(--el-fill-color-light);
+    color: var(--el-text-color-secondary);
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 13px;
+    line-height: 1;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.stats-refresh-button:hover:not(:disabled) {
+    background: var(--el-fill-color);
+    color: var(--admin-purple);
+    border-color: var(--admin-purple);
+}
+
+.stats-refresh-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.65;
+}
+
 @media (max-width: 768px) {
+    .breadcrumb-actions {
+        gap: 4px;
+    }
+
     .stats-badge {
         font-size: 10px;
-        padding: 2px 6px;
+        height: 28px;
+        padding: 0 8px;
         border-radius: 8px;
     }
     
     .stats-badge-icon {
         font-size: 9px;
+    }
+
+    .stats-refresh-button {
+        width: 28px;
+        height: 28px;
+        min-width: 28px;
+        border-radius: 8px;
+        font-size: 12px;
     }
 }
 
